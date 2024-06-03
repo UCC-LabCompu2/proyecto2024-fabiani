@@ -1,7 +1,17 @@
-class Vector2D {
+export class Vector2 {
     constructor(x = 0, y = 0) {
         this.x = x;
         this.y = y;
+    }
+    
+    set(x, y) {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
+
+    clone() {
+        return new Vector2(this.x, this.y);
     }
 
     add(v) {
@@ -57,54 +67,30 @@ class Vector2D {
     }
 
     static add(v1, v2) {
-        return new Vector2D(v1.x + v2.x, v1.y + v2.y);
+        return new Vector2(v1.x + v2.x, v1.y + v2.y);
     }
 
     static subtract(v1, v2) {
-        return new Vector2D(v1.x - v2.x, v1.y - v2.y);
+        return new Vector2(v1.x - v2.x, v1.y - v2.y);
     }
 
     static multiply(v, scalar) {
-        return new Vector2D(v.x * scalar, v.y * scalar);
+        return new Vector2(v.x * scalar, v.y * scalar);
     }
 
     static divide(v, scalar) {
         if (scalar !== 0) {
-            return new Vector2D(v.x / scalar, v.y / scalar);
+            return new Vector2(v.x / scalar, v.y / scalar);
         } else {
-            return new Vector2D();
+            return new Vector2();
         }
     }
-}
 
-class Object {
-    constructor() {
-        this.name = "";
-        this.childs = {};
+    static get ZERO() {
+        return new Vector2(0, 0);
     }
 
-    appendChild(child) {
-        this.childs[child.name] = child;
-    }
-
-    removeChild(child) {
-        delete this.childs[child.name];
+    static get ONE() {
+        return new Vector2(1, 1);
     }
 }
-
-class Entity extends Object {
-    constructor() {
-        super();
-        this.position = new Vector2D(0, 0);
-    }
-
-    update(deltaTime) {
-        // Lógica de actualización específica de la entidad
-    }
-
-    render(ctx) {
-        // Renderiza la entidad en el contexto de canvas
-    }
-}
-
-export { Entity, Object, Vector2D }

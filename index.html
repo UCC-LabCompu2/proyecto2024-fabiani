@@ -10,18 +10,20 @@
             padding: 0;
             overflow: hidden;
             box-sizing: border-box;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background-color: gray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         canvas {
             background-color: rgb(130, 228, 111);
-            width: 100%;
-            height: auto;
         }
     </style>
 </head>
 <body>
+    <canvas id="viewport" width="400" height="400"></canvas>
 <script type="module" src="game.js"></script>
 </body>
 </html>
