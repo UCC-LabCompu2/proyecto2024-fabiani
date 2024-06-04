@@ -31,7 +31,7 @@ class Player extends Node2D  {
         super();
         this.speed = 0.5;
         this.playerName = "";
-        let spr = new Sprite("../assets/sprites/player.png");
+        let spr = new Sprite("./assets/sprites/player.png");
         spr.name = "spr";
         spr.anchor.set(0.5, 0.5);
         this.appendChild(spr)
