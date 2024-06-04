@@ -1,6 +1,7 @@
 import { Node2D } from './core.js';
 import { Vector2 } from './vector2.js';
 
+
 class ColorRect extends Node2D {
     constructor(color, x, y, width, height) {
         super();

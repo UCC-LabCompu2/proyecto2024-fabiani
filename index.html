@@ -3,27 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            box-sizing: border-box;
-            width: 100vw;
-            height: 100vh;
-            background-color: gray;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        canvas {
-            background-color: rgb(130, 228, 111);
-        }
-    </style>
+    <meta name="author" content="Lucas Fabiani">
+    <meta name="description" content="A simple game">
+    <meta name="keywords" content="html, css, js, game">
+    <title>Flopy Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
-<body>
-    <canvas id="viewport" width="400" height="400"></canvas>
+<body class="flex center vbox">
+    <div class="flex screen center">
+        <div class="flex center-x panel expand-all vbox p-2 gap-20" id="menu">
+            <h1>Flopy Game</h1>
+            <label for="name">Name: </label>
+            <input type="text" id="name" name="name" placeholder="Enter your name">
+            <input type="button" id="start" value="Play">
+        </div>
+        <canvas class="expand-all" id="viewport" width="400" height="400"></canvas>
+    </div>
+    <div class="flex center">
+        <div class="arrow-controls">
+            <div class="arrow-group">
+                <i class="fas fa-arrow-up arrow-icon" id="upArrow"></i>
+            </div>
+            <div class="arrow-group">
+                <i class="fas fa-arrow-left arrow-icon" id="leftArrow"></i>
+                <i class="fas fa-arrow-right arrow-icon" id="rightArrow"></i>
+            </div>
+            <div class="arrow-group">
+                <i class="fas fa-arrow-down arrow-icon" id="downArrow"></i>
+            </div>
+        </div>
+    </div>
+    
 <script type="module" src="game.js"></script>
 </body>
 </html>

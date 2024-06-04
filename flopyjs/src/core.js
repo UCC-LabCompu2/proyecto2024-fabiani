@@ -1,4 +1,16 @@
+
 import { Vector2 } from "./vector2.js";
+
+class Transform {
+    constructor(x, y) {
+        this.position = new Vector2D(x, y);
+        this.rotation = 0;
+        this.scale = new Vector2D(1, 1);
+        this.parent = null
+    }
+
+    
+}
 
 class Object {
     constructor() {
@@ -58,18 +70,42 @@ class Object {
         }
         return main;
     }
+
+    findNodes(className) {
+        let nodes = [];
+        this._findNodes(className, nodes)
+        return nodes
+    }
+
+    _findNodes(className, nodes) {
+        this.childs.forEach(node => {
+            if (node instanceof className) {
+                nodes.push(node);
+            }
+            node._findNodes(className, nodes);
+        });
+    }
 }
+
 
 class Node2D extends Object {
     constructor() {
         super();
         this.position = Vector2.ZERO;
+        this.globalPosition = Vector2.ZERO;
         this.rotation = 0; // Rotación en radianes
         this.scale = Vector2.ONE
         this.anchor = Vector2.ONE
         this.processMode = 0
         this.visible = true;
         this._init()
+    }
+
+    setPosition(x , y) {
+        this.position = new Vector2(x, y);
+        this.childs.forEach(child => {
+            child.globalPosition = child.position.add(this.globalPosition);
+        })
     }
 
     _init() {
@@ -97,6 +133,7 @@ class Node2D extends Object {
         ctx.restore()
     }
 }
+
 
 class MainLoop {
     constructor() {
@@ -128,6 +165,8 @@ export class Viewport extends Node2D {
     }
 }
 
+
+
 export function createGame(canvasSrc) {
     return new SceneTree(canvasSrc);
 }
@@ -142,10 +181,15 @@ class SceneTree extends Node2D {
         this.gameLoop = this.gameLoop.bind(this);
     }
 
+    fincNodes(className) {
+        this.root.fincNodes(className);
+    }
+
     run() {
         requestAnimationFrame(this.gameLoop)
     }
 
+    
     gameLoop(timestamp) {
         let delta = timestamp - this.lastTime
         this.lastTime = timestamp

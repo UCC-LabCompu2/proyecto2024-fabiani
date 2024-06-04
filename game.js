@@ -1,14 +1,23 @@
-import { createGame, Vector2 } from "./flopyjs/main.js"
+import { createGame, Vector2, Sprite } from "./flopyjs/main.js"
 import Player from "./js/player.js"
 
 let canvas = document.getElementById( 'viewport' )
-console.log(canvas)
 let game = createGame(canvas)
 
 let player = new Player()
 
 player.position = new Vector2(200, 200)
 
-game.root.setBackgoundColor("#237845")
+game.root.setBackgoundColor("#234845")
 game.root.appendChild(player)
-game.run()
+
+game.run();
+
+let startButton = document.getElementById( 'start');
+let menu = document.getElementById( 'menu');
+
+startButton.addEventListener( 'click', () => {
+    menu.classList.add('hidden');
+    let playerName = document.getElementById( 'name').value;
+    player.getChild(1).text = playerName;
+})
