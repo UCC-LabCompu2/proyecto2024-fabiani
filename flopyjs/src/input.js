@@ -1,4 +1,5 @@
 class Input {
+    static ARROW_LEFT = 'ArrowLeft';
     constructor() {
         this.keyMap = {}
         this.keys = {};
@@ -19,11 +20,14 @@ class Input {
             this.keys[e.code] = false;
         });
     }
+    setPressed(key) {
+        this.keys[key] = true;
+    }
+    setReleased(key) {
+        this.keys[key] = false;
+    }
     getKeys() {
         return this.keys;
-    }
-    isPressed(key) {
-        return !!this.keys[key];
     }
     setKeyMap(keyMap) {
         this.keyMap = keyMap;

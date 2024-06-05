@@ -25,6 +25,54 @@ class Label extends Node2D {
     }
 }
 
+let relativeX = 0
+let relativeY = 0
+let dragging = false
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    const joystickContainer = document.getElementById('joystickContainer');
+    const joystick = document.getElementById('joystick');
+
+    dragging = false;
+    let startX, startY, currentX, currentY;
+    const centerX = joystickContainer.offsetWidth / 2;
+    const centerY = joystickContainer.offsetHeight / 2;
+
+    joystick.addEventListener('mousedown', (e) => {
+        dragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (dragging) {
+            currentX = e.clientX - startX;
+            currentY = e.clientY - startY;
+
+            const distance = Math.sqrt(currentX ** 2 + currentY ** 2);
+            const maxDistance = joystickContainer.offsetWidth / 2 - joystick.offsetWidth / 2;
+
+            if (distance > maxDistance) {
+                const angle = Math.atan2(currentY, currentX);
+                currentX = Math.cos(angle) * maxDistance;
+                currentY = Math.sin(angle) * maxDistance;
+            }
+
+            joystick.style.transform = `translate(${currentX}px, ${currentY}px)`;
+
+            relativeX = currentX / maxDistance;
+            relativeY = currentY / maxDistance;
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (dragging) {
+            dragging = false;
+            joystick.style.transform = 'translate(0px, 0px)';
+        }
+    });
+});
+
 // Player class
 class Player extends Node2D  {
     constructor() {
@@ -47,11 +95,20 @@ class Player extends Node2D  {
         let vel = new Vector2();
         vel.x = Input.isPressed('right') - Input.isPressed('left');
         vel.y = Input.isPressed('down') - Input.isPressed('up');
+        if (dragging) {
+            vel.x = relativeX
+            vel.y = relativeY
+        }
+        
         vel.normalize();
         vel.mult(this.speed * delta);
         if (vel.x != 0 || vel.y != 0) this.getChild(0).rotation = vel.angle() + Math.PI * (3 / 2);
         this.move(vel);
         this.position.clamp(0, 0, this.getTree().root.width - this.getChild(0).width, this.getTree().root.height - this.getChild(0).height);
+    }
+
+    input_move(vel) {
+        this.move(vel.mult(this.speed));
     }
 
     move(vel) {

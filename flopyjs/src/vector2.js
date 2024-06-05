@@ -93,4 +93,20 @@ export class Vector2 {
     static get ONE() {
         return new Vector2(1, 1);
     }
+
+    static get UP() {
+        return new Vector2(0, -1);
+    }
+
+    static get DOWN() {
+        return new Vector2(0, 1);
+    }
+
+    static get LEFT() {
+        return new Vector2(-1, 0);
+    }
+
+    static get RIGHT() {
+        return new Vector2(1, 0);
+    }
 }

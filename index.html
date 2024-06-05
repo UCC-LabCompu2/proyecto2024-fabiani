@@ -12,6 +12,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        #joystickContainer {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            background: rgb(31,33,37);
+            background: radial-gradient(circle, rgba(31,33,37,1) 12%, rgba(7,15,17,1) 100%);
+            border-radius: 50%;
+            margin: 50px;
+        }
+        #joystick {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: rgb(167, 173, 184);
+            border-radius: 50%;
+            top: 50px; /* (container size - joystick size) / 2 */
+            left: 50px;
+        }
+        #joystick:active {
+            background-color: rgb(224, 224, 224);
+        }
+    </style>
 </head>
 <body class="flex center vbox">
     <div class="flex screen center">
@@ -23,21 +46,26 @@
         </div>
         <canvas class="expand-all" id="viewport" width="400" height="400"></canvas>
     </div>
-    <div class="flex center">
+    <!-- <div class="flex center">
         <div class="arrow-controls">
             <div class="arrow-group">
                 <i class="fas fa-arrow-up arrow-icon" id="upArrow"></i>
             </div>
             <div class="arrow-group">
-                <i class="fas fa-arrow-left arrow-icon" id="leftArrow"></i>
+                <i class="fas fa-arrow-left arrow-icon" id="leftArrow" mousedown="startMoveLeft()" mouseup="stopMoveLeft()"></i>
                 <i class="fas fa-arrow-right arrow-icon" id="rightArrow"></i>
             </div>
             <div class="arrow-group">
                 <i class="fas fa-arrow-down arrow-icon" id="downArrow"></i>
             </div>
         </div>
+    </div> -->
+    <div class="flex center">
+        <div id="joystickContainer">
+            <div id="joystick"></div>
+        </div>
     </div>
-    
+
 <script type="module" src="game.js"></script>
 </body>
 </html>
