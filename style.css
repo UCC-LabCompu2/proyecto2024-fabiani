@@ -1,8 +1,12 @@
 :root {
+    --light-secondary: rgb(91, 231, 78);
     --secondary: rgb(92, 223, 52);
     --dark-secondary: rgb(48, 177, 65);
     --darker-secondary: rgb(36, 148, 49);
     --late-secondary: rgb(118, 199, 111);
+    --font-size-text: 1.2rem;
+    --font-size-title: 3rem;
+    --normal-radius: 1rem;
 }
 
 body {
@@ -16,10 +20,16 @@ body {
     background: radial-gradient(circle, rgba(87,250,103,1) 12%, rgba(0,212,255,1) 100%);
     color: white;
     font-family: "Pixelify Sans";
+    font-size: var(--font-size-text);
+    
+}
+
+canvas {
+    border-radius: var(--normal-radius);
 }
 
 h1 {
-    font-size: 3rem;
+    font-size: var(--font-size-title);
     text-align: center;
 }
 
@@ -27,6 +37,7 @@ h1 {
     position: relative;
     width: 400px;
     height: 400px;
+    margin: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -58,8 +69,10 @@ h1 {
 
 .panel {
     position: absolute;
-    background-color: rgba(36, 36, 36, 0.397);
+    background-color: rgba(59, 59, 59, 0.363);
     backdrop-filter: blur(2px);
+    border-radius: var(--normal-radius);
+    z-index: 1;
 }
 
 #viewport {
@@ -88,6 +101,10 @@ h1 {
     gap: 20px;
 }
 
+.gap-10 {
+    gap: 10px;
+}
+
 .gap-5 {
     gap: 5px;
 }
@@ -96,9 +113,29 @@ h1 {
     flex-direction: row;
 }
 
+input {
+    border-radius: var(--normal-radius);
+}
+
+footer {
+    width: 100%;
+}
+
+.icon {
+    width: 50px;
+    height: 50px;
+    padding: .5rem;
+    background-color: white;
+    border-radius: 30%;
+    cursor: pointer;
+    margin-left: 1rem;
+    box-shadow: 0 2px 5px #342423;
+}
+
 input[type="text"] {
     background-color: rgb(34, 35, 37);
-    padding: 0.5rem;
+    font-size: var(--font-size-text);
+    padding: 1rem;
     border: none;
     border-bottom: 5px solid var(--secondary);
     color: white;
@@ -113,17 +150,19 @@ input[type="text"]::placeholder {
 input[type="button"] {
     background-color: var(--secondary);
     border: none;
-    padding: 1rem;
+    padding: .5rem;
     color: white;
     font-family: "Pixelify Sans";
-    border-bottom: 5px solid var(--dark-secondary);
+    border: .2rem solid var(--dark-secondary);
+    border-bottom: 1rem solid var(--dark-secondary);
     cursor: pointer;
-    font-size: 2rem;
+    font-size: var(--font-size-title);
 }
 
 input[type="button"]:hover {
-    background-color: var(--dark-secondary);
-    border-bottom: 5px solid var(--darker-secondary);
+    color: var(--dark-secondary);
+    background-color: var(--light-secondary);
+    border-color: var(--secondary);
 }
 
 .hidden {
@@ -154,6 +193,29 @@ input[type="button"]:hover {
     background-color: rgb(224, 224, 224);
 }
 
+#pause {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 1rem;
+    border-radius: 50%;
+    z-index: 0;
+    cursor: pointer;
+}
+
+#pause > i {
+    font-size: var(--font-size-text);
+    color: white;
+}
+
+#pause:hover > i{
+    color: gray;
+}
+
+.transparent {
+    background-color: transparent;
+    border: none;
+}
 @media screen and (min-width: 500px) {
    #joystick-container {
         display: none;

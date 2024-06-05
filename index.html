@@ -6,6 +6,7 @@
     <meta name="author" content="Lucas Fabiani">
     <meta name="description" content="A simple game">
     <meta name="keywords" content="html, css, js, game">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
     <title>Flopy Game</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,20 +15,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 </head>
 <body class="flex center vbox">
-    <div class="flex screen center">
-        <div class="flex center-x panel expand-all vbox p-2 gap-20" id="menu">
-            <h1>Flopy Game</h1>
+    <main class="flex screen center">
+        <nav class="flex center-x panel expand-all vbox p-2 gap-10" id="menu">
+            <h1 id="title">Flopy Game</h1>
             <label for="name">Name: </label>
-            <input type="text" id="name" name="name" placeholder="Enter your name">
-            <input type="button" id="start" value="Play">
-        </div>
+            <input type="text" id="name" name="name" placeholder="Enter your name" size="50" maxlength="16">
+            <input type="button" id="start" value="GO!">
+        </nav>
+        <button class="transparent" id="pause"><i class="fas fa-pause"></i></button>
         <canvas class="expand-all" id="viewport" width="400" height="400"></canvas>
-    </div>
+    </main>
     <div class="flex center">
         <div id="joystick-container">
             <div id="joystick"></div>
         </div>
     </div>
+    <footer class="flex center-x">
+        <p>Lucas Fabiani 2024</p>
+        <a href="https://github.com/UCC-LabCompu2/proyecto2024-fabiani" target="_blank">
+            <img class="icon" alt="github" src="assets/images/github.png">
+        </a>
+    </footer>
 
 <script type="module" src="game.js"></script>
 </body>

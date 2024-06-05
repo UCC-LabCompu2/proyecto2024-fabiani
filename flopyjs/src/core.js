@@ -1,15 +1,13 @@
 
-import { Vector2 } from "./vector2.js";
+import { Vec } from "./vector.js";
 
 class Transform {
     constructor(x, y) {
-        this.position = new Vector2D(x, y);
+        this.position = new Vec(x, y);
         this.rotation = 0;
-        this.scale = new Vector2D(1, 1);
+        this.scale = new Vec(1, 1);
         this.parent = null
     }
-
-    
 }
 
 class Object {
@@ -88,21 +86,21 @@ class Object {
 }
 
 
-class Node2D extends Object {
+class Node extends Object {
     constructor() {
         super();
-        this.position = Vector2.ZERO;
-        this.globalPosition = Vector2.ZERO;
+        this.position = Vec.ZERO;
+        this.globalPosition = Vec.ZERO;
         this.rotation = 0; // Rotación en radianes
-        this.scale = Vector2.ONE
-        this.anchor = Vector2.ONE
+        this.scale = Vec.ONE
+        this.anchor = Vec.ONE
         this.processMode = 0
         this.visible = true;
         this._init()
     }
 
     setPosition(x , y) {
-        this.position = new Vector2(x, y);
+        this.position = new Vec(x, y);
         this.childs.forEach(child => {
             child.globalPosition = child.position.add(this.globalPosition);
         })
@@ -141,7 +139,7 @@ class MainLoop {
     }
 }
 
-export class Viewport extends Node2D {
+export class Viewport extends Node {
     constructor(canvas) {
         super()
         this.canvas = canvas;
@@ -166,12 +164,16 @@ export class Viewport extends Node2D {
 }
 
 
-
+/**
+ * Crea el arbol de escena
+ * @param {canvas} canvasSrc 
+ * @returns {SceneTree} Arbol de escena
+ */
 export function createGame(canvasSrc) {
     return new SceneTree(canvasSrc);
 }
 
-class SceneTree extends Node2D {
+class SceneTree extends Node {
     constructor(canvas) {
         super()
         let root = new Viewport(canvas)
@@ -179,6 +181,7 @@ class SceneTree extends Node2D {
         this.root = root
         this.lastTime = 0;
         this.gameLoop = this.gameLoop.bind(this);
+        this.fps = 60;
     }
 
     fincNodes(className) {
@@ -194,6 +197,8 @@ class SceneTree extends Node2D {
         let delta = timestamp - this.lastTime
         this.lastTime = timestamp
 
+        if (delta > 1000 / this.fps) delta = 1000 / this.fps
+
         this.root._process(delta);
         this.root._render();
 
@@ -203,6 +208,6 @@ class SceneTree extends Node2D {
 
 export { 
     Object,
-    Node2D, 
+    Node as Node2D, 
     MainLoop,
 }

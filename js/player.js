@@ -13,7 +13,10 @@ const CONFIG = {
 // Configura el mapa de entradas
 Input.setKeyMap(CONFIG.inputMap);
 
-// Player class
+/**
+ * Clase Player que hereda Node2D
+ * @extends Node2D
+ */
 class Player extends Node2D  {
     constructor() {
         super();
@@ -27,6 +30,8 @@ class Player extends Node2D  {
         let nameLabel = new Label(this.playerName, "Pixelify Sans", "white", 18);
         nameLabel.anchor.set(0.5, 0.5);
         nameLabel.name = "nameLabel";
+        nameLabel.posX = 15
+        nameLabel.posY = -10
         this.appendChild(nameLabel)
         console.log(this)
     }
