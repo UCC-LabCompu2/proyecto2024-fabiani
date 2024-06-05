@@ -38,13 +38,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const centerX = joystickContainer.offsetWidth / 2;
     const centerY = joystickContainer.offsetHeight / 2;
 
-    joystick.addEventListener('mousedown', (e) => {
+    joystick.addEventListener('touchdown', (e) => {
         dragging = true;
         startX = e.clientX;
         startY = e.clientY;
     });
 
-    document.addEventListener('mousemove', (e) => {
+    document.addEventListener('touchmove', (e) => {
         if (dragging) {
             currentX = e.clientX - startX;
             currentY = e.clientY - startY;
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    document.addEventListener('mouseup', () => {
+    document.addEventListener('touchup', () => {
         if (dragging) {
             dragging = false;
             joystick.style.transform = 'translate(0px, 0px)';
