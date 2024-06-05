@@ -25,53 +25,74 @@ class Label extends Node2D {
     }
 }
 
-let relativeX = 0
-let relativeY = 0
-let dragging = false
+let relativeX = 0;
+let relativeY = 0;
+let dragging = false;
 
 document.addEventListener('DOMContentLoaded', (event) => {
     const joystickContainer = document.getElementById('joystickContainer');
     const joystick = document.getElementById('joystick');
 
-    dragging = false;
-    let startX, startY, currentX, currentY;
     const centerX = joystickContainer.offsetWidth / 2;
     const centerY = joystickContainer.offsetHeight / 2;
+    const maxDistance = joystickContainer.offsetWidth / 2 - joystick.offsetWidth / 2;
 
-    joystick.addEventListener('mousedown', (e) => {
+    function startDrag(e) {
+        e.preventDefault();
         dragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-    });
+        updatePosition(e);
+    }
 
-    document.addEventListener('mousemove', (e) => {
+    function onDrag(e) {
         if (dragging) {
-            currentX = e.clientX - startX;
-            currentY = e.clientY - startY;
-
-            const distance = Math.sqrt(currentX ** 2 + currentY ** 2);
-            const maxDistance = joystickContainer.offsetWidth / 2 - joystick.offsetWidth / 2;
-
-            if (distance > maxDistance) {
-                const angle = Math.atan2(currentY, currentX);
-                currentX = Math.cos(angle) * maxDistance;
-                currentY = Math.sin(angle) * maxDistance;
-            }
-
-            joystick.style.transform = `translate(${currentX}px, ${currentY}px)`;
-
-            relativeX = currentX / maxDistance;
-            relativeY = currentY / maxDistance;
+            e.preventDefault();
+            updatePosition(e);
         }
-    });
+    }
 
-    document.addEventListener('mouseup', () => {
+    function endDrag(e) {
+        e.preventDefault();
         if (dragging) {
             dragging = false;
             joystick.style.transform = 'translate(0px, 0px)';
+            relativeX = 0;
+            relativeY = 0;
         }
-    });
+    }
+
+    function updatePosition(e) {
+        const rect = joystickContainer.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = clientX - rect.left - centerX;
+        const y = clientY - rect.top - centerY;
+
+        const distance = Math.sqrt(x * x + y * y);
+        let newX = x;
+        let newY = y;
+
+        if (distance > maxDistance) {
+            const angle = Math.atan2(y, x);
+            newX = Math.cos(angle) * maxDistance;
+            newY = Math.sin(angle) * maxDistance;
+        }
+
+        joystick.style.transform = `translate(${newX}px, ${newY}px)`;
+
+        relativeX = newX / maxDistance;
+        relativeY = newY / maxDistance;
+    }
+
+    joystick.addEventListener('mousedown', startDrag);
+    joystick.addEventListener('touchstart', startDrag, { passive: false });
+
+    document.addEventListener('mousemove', onDrag);
+    document.addEventListener('touchmove', onDrag, { passive: false });
+
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
 });
+
 
 // Player class
 class Player extends Node2D  {

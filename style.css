@@ -18,7 +18,6 @@ body {
     font-family: "Pixelify Sans";
 }
 
-
 h1 {
     font-size: 3rem;
     text-align: center;
@@ -167,8 +166,12 @@ input[type="button"]:hover {
     color: var(--secondary);
 }
 
+.joystick {
+    width: 200px;
+    height: 200px;
+    background-color: gray;
+}
+
 @media screen and (min-width: 500px) {
-    #joystickContainer {
-        display: none;
-    }
+   
 }
