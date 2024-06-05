@@ -1,103 +1,23 @@
-import { Node2D, Vector2, Sprite, Input, CONFIG } from "../flopyjs/main.js";
+import { Label, Node2D, Vector2, Sprite, Input } from "../flopyjs/main.js";
+import { Joystick } from "./joystick.js"
+
+const CONFIG = {
+    inputMap: {
+        left: ["ArrowLeft", "KeyA"],
+        right: ["ArrowRight", "KeyD"],
+        up: ["ArrowUp", "KeyW"],
+        down: ["ArrowDown", "KeyS"]
+    }
+};
 
 // Configura el mapa de entradas
 Input.setKeyMap(CONFIG.inputMap);
-
-class Label extends Node2D {
-    constructor(text, font, color, size, width = 100, height = 20) {
-        super();
-        this.text = text;
-        this.font = font;
-        this.color = color;
-        this.size = size
-        this.rectWidth = width;
-        this.rectHeight = height;
-    }
-    _draw(ctx) {
-        ctx.save();
-        ctx.fillStyle = this.color;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.font = `${this.size}px ${this.font}`;
-        ctx.fillText(this.text, 15, -10);
-
-        ctx.restore();
-    }
-}
-
-let relativeX = 0;
-let relativeY = 0;
-let dragging = false;
-
-document.addEventListener('DOMContentLoaded', (event) => {
-    const joystickContainer = document.getElementById('joystickContainer');
-    const joystick = document.getElementById('joystick');
-
-    const centerX = joystickContainer.offsetWidth / 2;
-    const centerY = joystickContainer.offsetHeight / 2;
-    const maxDistance = joystickContainer.offsetWidth / 2 - joystick.offsetWidth / 2;
-
-    function startDrag(e) {
-        e.preventDefault();
-        dragging = true;
-        updatePosition(e);
-    }
-
-    function onDrag(e) {
-        if (dragging) {
-            e.preventDefault();
-            updatePosition(e);
-        }
-    }
-
-    function endDrag(e) {
-        e.preventDefault();
-        if (dragging) {
-            dragging = false;
-            joystick.style.transform = 'translate(0px, 0px)';
-            relativeX = 0;
-            relativeY = 0;
-        }
-    }
-
-    function updatePosition(e) {
-        const rect = joystickContainer.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        const x = clientX - rect.left - centerX;
-        const y = clientY - rect.top - centerY;
-
-        const distance = Math.sqrt(x * x + y * y);
-        let newX = x;
-        let newY = y;
-
-        if (distance > maxDistance) {
-            const angle = Math.atan2(y, x);
-            newX = Math.cos(angle) * maxDistance;
-            newY = Math.sin(angle) * maxDistance;
-        }
-
-        joystick.style.transform = `translate(${newX}px, ${newY}px)`;
-
-        relativeX = newX / maxDistance;
-        relativeY = newY / maxDistance;
-    }
-
-    joystick.addEventListener('mousedown', startDrag);
-    joystick.addEventListener('touchstart', startDrag, { passive: false });
-
-    document.addEventListener('mousemove', onDrag);
-    document.addEventListener('touchmove', onDrag, { passive: false });
-
-    document.addEventListener('mouseup', endDrag);
-    document.addEventListener('touchend', endDrag);
-});
-
 
 // Player class
 class Player extends Node2D  {
     constructor() {
         super();
+        this.joystick = new Joystick('joystick-container')
         this.speed = 0.5;
         this.playerName = "";
         let spr = new Sprite("./assets/sprites/player.png");
@@ -116,12 +36,14 @@ class Player extends Node2D  {
         let vel = new Vector2();
         vel.x = Input.isPressed('right') - Input.isPressed('left');
         vel.y = Input.isPressed('down') - Input.isPressed('up');
-        if (dragging) {
-            vel.x = relativeX
-            vel.y = relativeY
+        if (this.joystick.dragging) {
+            vel.x = this.joystick.relativeX
+            vel.y = this.joystick.relativeY
+        } else {
+            vel.normalize()
         }
         
-        vel.normalize();
+
         vel.mult(this.speed * delta);
         if (vel.x != 0 || vel.y != 0) this.getChild(0).rotation = vel.angle() + Math.PI * (3 / 2);
         this.move(vel);

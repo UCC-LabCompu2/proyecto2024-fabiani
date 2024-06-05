@@ -130,48 +130,32 @@ input[type="button"]:hover {
     display: none;
 }
 
-.arrow-controls {
-    margin: 2rem;
-    background-color: rgb(47, 50, 61);
-    width: 14rem;
-    height: 12rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.arrow-group {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-}
-
-.arrow-icon {
-    padding: 1rem 2rem;
-    font-size: 2rem;
-    cursor: pointer;
-}
-
-.arrow-icon span {
-    display: block;
-    font-size: 14px;
-}
-
-.arrow-icon:hover {
-    color: var(--secondary);
-}
-
-.arrow-icon:hover span {
-    color: var(--secondary);
-}
-
-.joystick {
+#joystick-container {
+    position: relative;
     width: 200px;
     height: 200px;
-    background-color: gray;
+    background: rgb(31,33,37);
+    background: radial-gradient(circle, rgba(31,33,37,1) 12%, rgba(7,15,17,1) 100%);
+    border-radius: 50%;
+    margin: 50px;
+}
+
+#joystick {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: rgb(167, 173, 184);
+    border-radius: 50%;
+    top: 50px; /* (container size - joystick size) / 2 */
+    left: 50px;
+}
+
+#joystick:active {
+    background-color: rgb(224, 224, 224);
 }
 
 @media screen and (min-width: 500px) {
-   
+   .joystick-container {
+        display: none;
+   }
 }

@@ -1,34 +1,39 @@
 class Input {
-    static ARROW_LEFT = 'ArrowLeft';
     constructor() {
-        this.keyMap = {}
+        this.keyMap = {};
         this.keys = {};
-        this.setListeners()
+        this.setListeners();
     }
+
     static getInstance() {
         if (!Input.instance) {
             Input.instance = new Input();
         }
         return Input.instance;
     }
+
     setListeners() {
         window.addEventListener('keydown', (e) => {
             this.keys[e.code] = true;
         });
-        
+
         window.addEventListener('keyup', (e) => {
             this.keys[e.code] = false;
         });
     }
+
     setPressed(key) {
         this.keys[key] = true;
     }
+
     setReleased(key) {
         this.keys[key] = false;
     }
+
     getKeys() {
         return this.keys;
     }
+
     setKeyMap(keyMap) {
         this.keyMap = keyMap;
     }
