@@ -29,6 +29,7 @@ canvas {
 }
 
 h1 {
+    margin: 1rem;
     font-size: var(--font-size-title);
     text-align: center;
 }
@@ -156,7 +157,7 @@ input[type="button"] {
     border: .2rem solid var(--dark-secondary);
     border-bottom: 1rem solid var(--dark-secondary);
     cursor: pointer;
-    font-size: var(--font-size-title);
+    font-size: 3rem;
 }
 
 input[type="button"]:hover {
