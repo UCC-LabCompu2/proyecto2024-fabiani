@@ -1,5 +1,4 @@
 import { Node2D } from "./core.js";
-import { Vec } from "./vector.js";
 
 /**
  * Label para dibujar texto en pantalla

@@ -1,3 +1,10 @@
+/**
+ * Crea un joystick virtual basado ya en una estructura html
+ * <div id="joystick-container">
+        <div id="joystick"></div>
+    </div>
+ */
+
 class Joystick {
     constructor(containerId) {
         this.joystickContainer = document.getElementById(`${containerId}`);

@@ -1,51 +1,51 @@
-import { Label, createGame, Vector2, Sprite, Input } from "./flopyjs/main.js"
+import { $, Label, createGame, Vector2D } from "./flopyjs/main.js"
 import Player from "./js/player.js"
 
-let canvas = document.getElementById( 'viewport' )
-let game = createGame(canvas)
+// Inicializando el juego
+let canvas = $('#viewport');
+let game = createGame(canvas.object);
 
-let player = new Player()
+// Creando el jugador
+let player = new Player();
 
-player.position = new Vector2(200, 200)
+player.position = new Vector2D(200, 200);
 
-game.root.setBackgoundColor("#234845")
-game.root.appendChild(player)
+game.root.setBackgoundColor("#234845");
+game.root.appendChild(player);
 
-game.run();
 
-let fps = new Label("FPS: 0", "Pixelify Sans", "white", 16, 100, 50, 200, 20)
-game.root.appendChild(fps)
-window.setInterval( () => {
-    fps.text = "FPS: " + game.fps
+// Detalle de los fps
+let fps = new Label("FPS: 0", "Pixelify Sans", "white", 16, 100, 50, 200, 20);
+game.root.appendChild(fps);
+
+window.setInterval(() => {
+    fps.text = "FPS: " + game.fps;
 })
 
-let startButton = document.getElementById( 'start');
-let menu = document.getElementById( 'menu');
+// Interactividad del menu
+let startButton = $('#start');
+let menu = $('#menu');
+let name = $('#name');
 
-startButton.addEventListener( 'click', startGame)
+startButton.on('click', startGame);
 
 function startGame() {
-    menu.classList.add('hidden');
-    let playerName = document.getElementById( 'name').value;
-    player.getChild(1).text = playerName;
+    if (name.value == "") {
+        name.addClass("error");
+        return;
+    }
+
+    game.run();
+    game.pause = false
+    name.removeClass("error");
+    menu.hide();
+    player.getChild(1).text = name.value;
 
     startButton.value = "Continue";
-    document.getElementById('title').innerHTML = "Pause";
+    $("#title").html = "Pause";
 }
 
-//Pause
-let isPaused = false;
-document.addEventListener( 'keydown', (e) => {
-    if (e.key == "p") pause()
-})
-document.getElementById('pause').addEventListener( 'click', pause)
-
-function pause() {
-    if (isPaused) {
-        menu.classList.add('hidden');
-    } else {
-        menu.classList.remove('hidden');
-    }
-    isPaused = !isPaused;
-}
-
+$('#pause').on('click', () => {
+    menu.show(); 
+    game.pause = true;
+});

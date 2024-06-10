@@ -1,11 +1,20 @@
 # Flopy Engine
 Un simple motor de videojuegos creado desde cero con vanilla javascript
 
-## Conceptos basicos
-El motor esta diseñado al estilo de los motores como Godot y Unity que utilizan un arbol de escena **SceneTree** al que se le van agregando nodos. Estos nodos son customizables y heredan la clase **Node** (Fijese en `player.js`).
+- [Conceptos basicos](#conceptos-basicos)
+- [Comenzado](#comenzado)
+  - [Crear un jugador](#crear-un-jugador)
+- [Archivos](#archivos)
+- [Licencia](#licencia)
+- [Contacto](#contacto)
 
-- **SceneTree**: Maneja el bucle principal, renderizado y actualizacion de hijos. Nada que no este en el SceneTree se va a renderizar
-- **Node**: Clase basica a la que hereda cualquier objeto 2D que quieras crear
+[LINK PARA JUGAR](https://lucasfabiani.netlify.app/)
+
+## Conceptos basicos
+El motor esta diseñado al estilo de los motores como Godot y Unity que utilizan un árbol de escena **SceneTree** al que se le van agregando nodos. Estos nodos son customizables y heredan la clase **Node** (Fíjese en `player.js`).
+
+- **SceneTree**: Maneja el bucle principal, renderizado y actualizacion de hijos. Nada que no esté en el SceneTree se va a renderizar
+- **Node**: Clase básica a la que hereda cualquier objeto 2D que quieras crear
 - **Vec**: Vector 2D con el que se maneja muchos de los objetos en el juego
 - **Viewport**: Contiene el canva y su context 2D con el que se crea el juego
 - **Input**: Se encarga de manejar eventos
@@ -69,7 +78,7 @@ game.appendChild(player) // agrega el jugador al juego
 - `vector.js`: Contiene la clase Vec
 
 ## Licencia
-El motor de es de caracter publico y uso libre segun MIT licence
+El motor de es de carácter público y uso libre según MIT licence
 
 ## Contacto
-Para alguna colaboracion, encargo, trabajo o mas contactame al gmail oficial [lucasefabiani@gmail.com](https://mail.google.com/mail)
+Para alguna colaboración, encargo, trabajo o más contactame al gmail oficial [lucasefabiani@gmail.com](https://mail.google.com/mail)

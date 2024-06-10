@@ -1,5 +1,5 @@
 /** Class representing a 2D vector. */
-export class Vec {
+export class Vector2D {
     /**
      * Create a 2D vector.
      * @param {number} x - The x coordinate.
@@ -14,7 +14,7 @@ export class Vec {
      * Set the coordinates of the vector.
      * @param {number} x - The x coordinate.
      * @param {number} y - The y coordinate.
-     * @returns {Vec} - The modified vector.
+     * @returns {Vector2D} - The modified vector.
      */
     set(x, y) {
         this.x = x;
@@ -24,16 +24,16 @@ export class Vec {
 
     /**
      * Clone the vector.
-     * @returns {Vec} - A new vector with the same coordinates.
+     * @returns {Vector2D} - A new vector with the same coordinates.
      */
     clone() {
-        return new Vec(this.x, this.y);
+        return new Vector2D(this.x, this.y);
     }
 
     /**
      * Add another vector to this vector.
-     * @param {Vec} v - The vector to add.
-     * @returns {Vec} - The modified vector.
+     * @param {Vector2D} v - The vector to add.
+     * @returns {Vector2D} - The modified vector.
      */
     add(v) {
         this.x += v.x;
@@ -43,8 +43,8 @@ export class Vec {
 
     /**
      * Subtract another vector from this vector.
-     * @param {Vec} v - The vector to subtract.
-     * @returns {Vec} - The modified vector.
+     * @param {Vector2D} v - The vector to subtract.
+     * @returns {Vector2D} - The modified vector.
      */
     sub(v) {
         this.x -= v.x;
@@ -55,7 +55,7 @@ export class Vec {
     /**
      * Multiply this vector by a scalar value.
      * @param {number} scalar - The scalar value.
-     * @returns {Vec} - The modified vector.
+     * @returns {Vector2D} - The modified vector.
      */
     mult(scalar) {
         this.x *= scalar;
@@ -66,7 +66,7 @@ export class Vec {
     /**
      * Divide this vector by a scalar value.
      * @param {number} scalar - The scalar value.
-     * @returns {Vec} - The modified vector.
+     * @returns {Vector2D} - The modified vector.
      */
     div(scalar) {
         if (scalar !== 0) {
@@ -93,6 +93,24 @@ export class Vec {
     }
 
     /**
+     * Check if two vectors are equal.
+     * @param {Vector2D} vector - The vector to compare.
+     * @returns {boolean} - True if the vectors are equal, false otherwise.
+     */
+    isEquals(vector) {
+        return this.x == vector.x && this.y == vector.y
+    }
+
+    /**
+     * Check if coordinates are equal.
+     * @param {number} x - The x coordinate.
+     * @param {number} y - The y coordinate.
+     * @returns {boolean} - True if the vectors are equal, false otherwise.
+     */
+    isEquals(x, y) {
+        return this.x == x && this.y == y
+    }
+    /**
      * Clamp the vector between minimum and maximum values.
      * @param {number} minX - The minimum x value.
      * @param {number} minY - The minimum y value.
@@ -106,7 +124,7 @@ export class Vec {
 
     /**
      * Normalize the vector (make its length 1).
-     * @returns {Vec} - The modified vector.
+     * @returns {Vector2D} - The modified vector.
      */
     normalize() {
         let mag = this.length();
@@ -118,75 +136,37 @@ export class Vec {
 
     /**
      * Add two vectors.
-     * @param {Vec} v1 - The first vector.
-     * @param {Vec} v2 - The second vector.
-     * @returns {Vec} - A new vector representing the sum.
+     * @param {Vector2D} v1 - The first vector.
+     * @param {Vector2D} v2 - The second vector.
+     * @returns {Vector2D} - A new vector representing the sum.
      */
-    static add(v1, v2) {
-        return new Vec(v1.x + v2.x, v1.y + v2.y);
-    }
-
-    /**
-     * Subtract one vector from another.
-     * @param {Vec} v1 - The first vector.
-     * @param {Vec} v2 - The second vector.
-     * @returns {Vec} - A new vector representing the difference.
-     */
-    static sub(v1, v2) {
-        return new Vec(v1.x - v2.x, v1.y - v2.y);
-    }
-
-    /**
-     * Multiply a vector by a scalar value.
-     * @param {Vec} v - The vector.
-     * @param {number} scalar - The scalar value.
-     * @returns {Vec} - A new vector representing the product.
-     */
-    static mult(v, scalar) {
-        return new Vec(v.x * scalar, v.y * scalar);
-    }
-
-    /**
-     * Divide a vector by a scalar value.
-     * @param {Vec} v - The vector.
-     * @param {number} scalar - The scalar value.
-     * @returns {Vec} - A new vector representing the quotient.
-     */
-    static div(v, scalar) {
-        if (scalar !== 0) {
-            return new Vec(v.x / scalar, v.y / scalar);
-        } else {
-            return new Vec();
-        }
-    }
-
     /** Get a vector with both components set to zero. */
     static get ZERO() {
-        return new Vec(0, 0);
+        return new Vector2D(0, 0);
     }
 
     /** Get a vector with both components set to one. */
     static get ONE() {
-        return new Vec(1, 1);
+        return new Vector2D(1, 1);
     }
 
     /** Get a vector pointing up (positive y direction). */
     static get UP() {
-        return new Vec(0, -1);
+        return new Vector2D(0, -1);
     }
 
     /** Get a vector pointing down (negative y direction). */
     static get DOWN() {
-        return new Vec(0, 1);
+        return new Vector2D(0, 1);
     }
 
     /** Get a vector pointing left (negative x direction). */
     static get LEFT() {
-        return new Vec(-1, 0);
+        return new Vector2D(-1, 0);
     }
 
     /** Get a vector pointing right (positive x direction). */
     static get RIGHT() {
-        return new Vec(1, 0);
+        return new Vector2D(1, 0);
     }
 }
