@@ -10,7 +10,7 @@ let player = new Player();
 
 player.position = new Vector2D(200, 200);
 
-game.root.setBackgoundColor("#234845");
+game.root.setBackgroundColor("#234845");
 game.root.appendChild(player);
 
 

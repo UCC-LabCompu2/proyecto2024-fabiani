@@ -251,13 +251,15 @@ export function createGame(canvas) {
 /**
  * Clase que representa el árbol de escena que manejara el bucle principal
  */
-class SceneTree {
+export class SceneTree {
     /**
      * Crea un nuevo árbol de escena.
      * @param {HTMLCanvasElement} canvas - El elemento canvas del viewport.
      */
     constructor(canvas) {
-        this.root = new Viewport(canvas);
+        let root = new Viewport(canvas);
+        console.log(this);
+        this.root = root;
         this.lastTime = 0;
         this.gameLoop = this.gameLoop.bind(this);
         this.fps = 60;
