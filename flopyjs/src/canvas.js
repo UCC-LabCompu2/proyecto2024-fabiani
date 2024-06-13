@@ -1,4 +1,40 @@
 import { Node2D } from './core.js';
+import { Vector2D } from './vector.js';
+
+
+export class Color {
+  constructor(r = 255, g = 255, b = 255, a = 255) {
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
+  }
+
+  static get white() {
+    return new Color(255, 255, 255, 255);
+  }
+
+  static get black() {
+    return new Color(0, 0, 0, 255);
+  }
+
+  static get red() {
+    return new Color(255, 0, 0, 255);
+  }
+
+  static get green() {
+    return new Color(0, 255, 0, 255);
+  }
+
+  static get blue() {
+    return new Color(0, 0, 255, 255);
+  }
+
+  toString() {
+    return `rgba(${this.r},${this.g},${this.b},${this.a / 255})`;
+  }
+}
+
 
 /**
  * Clase que representa un rectángulo coloreado en el lienzo.
@@ -7,24 +43,20 @@ import { Node2D } from './core.js';
 class ColorRect extends Node2D {
     /**
      * Crea un nuevo rectángulo coloreado.
-     * @param {string} color - El color del rectángulo en formato CSS.
-     * @param {number} x - La coordenada x de la posición del rectángulo.
-     * @param {number} y - La coordenada y de la posición del rectángulo.
-     * @param {number} width - El ancho del rectángulo.
-     * @param {number} height - La altura del rectángulo.
-     */
-    constructor(color, x, y, width, height) {
+     * @param {Color} color - El color
+     * @param {Vector2D} size - Tamaño del rectangulo
+    */
+    constructor(color, size) {
         super();
-        this.size = new Vec(width, height);
+        this.size = size;
         this.color = color;
     }
-
     /**
      * Dibuja el rectángulo coloreado en el lienzo.
      * @param {CanvasRenderingContext2D} ctx - El contexto de renderizado 2D del lienzo.
      */
-    _draw(ctx) {
-        ctx.fillStyle = this.color;
+    render(ctx) {
+        ctx.fillStyle = this.color.toString();
         ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
     }
 }
@@ -78,14 +110,10 @@ class Sprite extends Texture {
      * @param {CanvasRenderingContext2D} ctx - El contexto de renderizado 2D del lienzo.
      */
     _draw(ctx) {
-        ctx.save();
-        ctx.translate(this.position.x + this.width / 2, this.position.y + this.height / 2); // Trasladar al centro del sprite
-        ctx.rotate(this.rotation); // Rotar el contexto
-        ctx.scale(this.scale.x, this.scale.y); // Escalar el contexto
-        ctx.drawImage(this.image, -this.width * this.anchor.x, -this.height * this.anchor.y, this.width, this.height); // Dibujar la imagen
-        ctx.restore(); // Restaurar el contexto a su estado original
+      ctx.drawImage(this.image, -this.width * this.anchor.x, -this.height * this.anchor.y, this.width, this.height); // Dibujar la imagen
     }
 }
+
 
 // Exporta las clases
 export { ColorRect, Texture, Sprite };

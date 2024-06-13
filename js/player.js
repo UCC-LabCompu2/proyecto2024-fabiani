@@ -1,4 +1,4 @@
-import { Label, Node2D, Vector2D, Sprite, Input } from "../flopyjs/main.js";
+import { Renderer, Color, Label, Node2D, Vector2D, Sprite, Input } from "../flopyjs/main.js";
 import { Joystick } from "./joystick.js"
 
 // Agrega otras teclas como entrada
@@ -21,6 +21,7 @@ Input.setKeyMap(CONFIG.inputMap);
 class Player extends Node2D  {
     constructor() {
         super();
+        this.position = new Vector2D();
         this.joystick = new Joystick('joystick-container')
         this.speed = 0.5;
         this.playerName = "";
@@ -29,16 +30,18 @@ class Player extends Node2D  {
         let spr = new Sprite("./assets/sprites/player.png");
         spr.name = "spr";
         spr.anchor.set(0.5, 0.5);
-        this.appendChild(spr)
+        this.addChild(spr)
+        this.spr = spr;
         let nameLabel = new Label(this.playerName, "Pixelify Sans", "white", 18);
         nameLabel.anchor.set(0.5, 0.5);
         nameLabel.name = "nameLabel";
-        nameLabel.posX = 15
-        nameLabel.posY = -10
-        this.appendChild(nameLabel)
+        nameLabel.posX = 0;
+        nameLabel.posY = -40;
+        this.addChild(nameLabel);
+        this.nameLabel = nameLabel;
     }
 
-    _process(delta) {
+    update(delta) {
         // Movimiento del jugador
         this.velocity.x = Input.isPressed('right') - Input.isPressed('left');
         this.velocity.y = Input.isPressed('down') - Input.isPressed('up');
@@ -51,9 +54,12 @@ class Player extends Node2D  {
         
 
         this.velocity.mult(this.speed * delta);
-        if (!this.velocity.isEquals(0, 0)) this.getChild(0).rotation = this.velocity.angle() + Math.PI * (3 / 2);
+        if (!this.velocity.isEquals(0, 0)) {
+            this.spr.rotation = this.velocity.angle() + Math.PI * (3 / 2);
+        }
         this.move(this.velocity);
-        this.position.clamp(0, 0, this.getRoot().width - this.getChild(0).width, this.getRoot().height - this.getChild(0).height);
+        // Evita que se salga de los bordes del Viewport.size
+        this.position.clamp(0, 0, this.getRoot().size.x, this.getRoot().size.y);
     }
 
     input_move(vel) {

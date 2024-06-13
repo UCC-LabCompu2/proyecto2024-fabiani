@@ -34,7 +34,8 @@ class Label extends Node2D {
         this.rectWidth = width;
         this.rectHeight = height;
     }
-    _draw(ctx) {
+    
+    render(ctx) {
         ctx.save();
         ctx.fillStyle = this.color;
         ctx.textAlign = "center";

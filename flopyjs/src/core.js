@@ -1,5 +1,7 @@
 import { Vector2D } from "./vector.js";
 
+let ok = ()=> console.log("ok");
+
 /**
  * Clase base para objetos 
  */
@@ -9,9 +11,9 @@ export class Object {
      */
     constructor() {
         this.name = "";
-        this.childs = [];
+        this.children = [];
         this.childCount = 0;
-        this.parent = null;
+        this.parent = null; // Hasta que se añada al arbol con addChild
     }
 
     /**
@@ -20,16 +22,19 @@ export class Object {
      * @returns {Object} El hijo correspondiente al índice especificado.
      */
     getChild(index) {
-        return this.childs[index];
+        return this.children[index];
     }
 
+    moveChild(from, to) {
+        this.children.splice(to, 0, this.children[from]);
+    }
     /**
      * Obtiene un hijo por su nombre.
      * @param {string} name - El nombre del hijo.
      * @returns {Object} El hijo correspondiente al nombre especificado.
      */
     getChildByName(name) {
-        return this.childs[name];
+        return this.children[name];
     }
 
     /**
@@ -45,7 +50,7 @@ export class Object {
      * @returns {Object[]} Un array con todos los hijos.
      */
     getChildren() {
-        return this.childs;
+        return this.children;
     }
 
     /**
@@ -68,8 +73,8 @@ export class Object {
      * Agrega un hijo.
      * @param {Object} child - El hijo a agregar.
      */
-    appendChild(child) {
-        this.childs[this.childCount] = child;
+    addChild(child) {
+        this.children[this.childCount] = child;
         child.setParent(this);
         this.childCount++;
     }
@@ -79,7 +84,7 @@ export class Object {
      * @param {number} index - El índice del hijo a eliminar.
      */
     removeChild(index) {
-        delete this.childs[index];
+        delete this.children[index];
         child.setParent(null);
         this.childCount--;
     }
@@ -90,7 +95,7 @@ export class Object {
      */
     removeChildByName(name) {
         let child = this.getChildByName(name);
-        delete this.childs[name];
+        delete this.children[name];
         child.setParent(null);
         this.childCount--;
     }
@@ -124,7 +129,7 @@ export class Object {
      * @param {Object[]} nodes - Un array para almacenar los nodos encontrados.
      */
     _findNodes(className, nodes) {
-        this.childs.forEach(node => {
+        this.children.forEach(node => {
             if (node instanceof className) {
                 nodes.push(node);
             }
@@ -133,120 +138,162 @@ export class Object {
     }
 }
 
-/**
- * Clase base para nodos renderizables
- */
 export class Node2D extends Object {
-    /**
-     * Crea un nuevo nodo 2D.
-     */
     constructor() {
         super();
         this.position = Vector2D.ZERO;
-        this.globalPosition = Vector2D.ZERO;
         this.rotation = 0; // Rotación en radianes
         this.scale = Vector2D.ONE;
-        this.anchor = Vector2D.ONE;
-        this.processMode = 1; // despausa
+        this.anchor = new Vector2D(0.5, 0.5); // Centro del nodo
+
+        this.paused = true; // Despausado inicialmente
         this.visible = true;
+
         this._init();
     }
 
-    /**
-     * Establece la posición del nodo.
-     * @param {number} x - La coordenada x de la posición.
-     * @param {number} y - La coordenada y de la posición.
-     */
-    setPosition(x, y) {
-        this.position = new Vector2D(x, y);
-        this.childs.forEach(child => {
-            child.globalPosition = child.position.add(this.globalPosition);
-        });
-    }
-
-    /**
-     * Inicializa el nodo.
-     */
     _init() {
-        this.processMode = 1;
-        this.childs.forEach(child => {
+        this.paused = false;
+        this.children.forEach(child => {
             child._init();
         });
     }
 
-    /**
-     * Procesa el nodo.
-     * @param {number} delta - El delta de tiempo desde el último fotograma.
-     */
-    _process(delta) {
-        if (this.processMode == 0) return;
-        this.childs.forEach(child => {
-            child._process(delta);
-        });
+    update(delta) {
+        if (this.paused) return;
+        this.children.forEach(child => child.update(delta));
     }
 
-    /**
-     * Dibuja el nodo.
-     * @param {CanvasRenderingContext2D} ctx - El contexto de renderizado 2D del lienzo.
-     */
     _draw(ctx) {
+        return
+    }
+
+    render(ctx) {
         if (!this.visible) return;
         ctx.save();
         ctx.translate(this.position.x, this.position.y);
+        ctx.rotate(this.rotation);
+        ctx.scale(this.scale.x, this.scale.y);
+        
+        this._draw(ctx) // Se dibuja a si mismo el Nodo2D 
+        // Este metodo lo pueden heredar los renderizables
 
-        this.childs.forEach(child => {
-            child._draw(ctx);
+        // Renderizar hijos
+        this.children.forEach(child => {
+            child.render(ctx);
         });
+
+        ctx.restore();
+    }
+
+    getGlobalPosition() {
+        let position = this.position.clone();
+        let node = this;
+        while (node.parent) {
+            node = node.parent;
+            position = position.add(node.position);
+        }
+        return position;
+    }
+}
+
+
+export class Viewport extends Node2D {
+    constructor() {
+        super();
+        this.size = new Vector2D(400, 400);
+        this.camera = null;
+    }
+
+    setCamera(camera) {
+        this.camera = camera;
+    }
+
+    _draw(ctx) {
+        ctx.fillStyle = "#432956";
+        ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
+    }
+
+    render(ctx) {
+        if (this.camera) {
+            ctx.save();
+            // Camara
+            const offset = this.camera.getGlobalPosition();
+            ctx.translate(-offset.x + this.size.x / 2, -offset.y + this.size.y / 2);
+            super.render(ctx);
+            ctx.restore();
+        } else {
+            super.render(ctx);
+        }
+    }
+}
+
+
+export class Camera extends Node2D {
+    constructor() {
+        super();
+        this.zoom = 1;
+    }
+
+    setZoom(zoom) {
+        this.zoom = zoom;
+    }
+
+    render(ctx) {
+        ctx.save();
+        ctx.scale(this.zoom, this.zoom);
+        super.render(ctx);
         ctx.restore();
     }
 }
 
-/**
- * Clase que representa el viewport (canva)
- */
-export class Viewport extends Node2D {
-    /**
-     * Crea un nuevo viewport.
-     * @param {HTMLCanvasElement} canvas - El elemento canvas del viewport.
-     */
-    constructor(canvas) {
-        super();
+export class Renderer {
+    constructor() {
+        if (!Renderer.instance) {
+            Renderer.instance = this;
+        }
+        return Renderer.instance;
+    }
+
+    static getInstance() {
+        if (!Renderer.instance) {
+            throw new Error("Renderer not initialized. Call new Renderer() first.");
+        }
+        return Renderer.instance;
+    }
+
+    setViewport(viewport) {
+        this.viewport = viewport;
+    }
+
+    setup(canvas) {
         this.canvas = canvas;
-        this.ctx = canvas.getContext("2d");
-        this.width = canvas.width;
-        this.height = canvas.height;
-        this.backgroundColor = "white";
+        this.ctx = this.canvas.getContext('2d');
     }
 
-    /**
-     * Establece el color de fondo del viewport.
-     * @param {string} color - El color de fondo.
-     */
-    setBackgroundColor(color) {
-        this.backgroundColor = color;
+    clear() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    /**
-     * Renderiza el viewport.
-     */
-    _render() {
-        this.ctx.clearRect(0, 0, this.width, this.height);
-        this.ctx.fillStyle = this.backgroundColor;
-        this.ctx.fillRect(0, 0, this.width, this.height);
-        this.childs.forEach(child => {
-            child._draw(this.ctx);
-        });
+    render(sceneTree) {
+        this.clear();
+        if (this.viewport && this.viewport.camera) {
+            this.ctx.save();
+            const camera = this.viewport.camera;
+            const position = camera.getGlobalPosition();
+           
+            this.ctx.translate(-position.x + this.canvas.width / 2, -position.y + this.canvas.height / 2);
+        }
+
+        sceneTree.render(this.ctx);
+
+        if (this.viewport && this.viewport.camera) {
+            this.ctx.restore();
+        }
     }
 }
 
-/**
- * Crea el árbol de escena.
- * @param {HTMLCanvasElement} canvas - El elemento canvas del viewport.
- * @returns {SceneTree} El árbol de escena.
- */
-export function createGame(canvas) {
-    return new SceneTree(canvas);
-}
+
 
 /**
  * Clase que representa el árbol de escena que manejara el bucle principal
@@ -257,12 +304,12 @@ export class SceneTree {
      * @param {HTMLCanvasElement} canvas - El elemento canvas del viewport.
      */
     constructor(canvas) {
-        let root = new Viewport(canvas);
-        console.log(this);
-        this.root = root;
+        this.canvas = canvas;
+        this.ctx = this.canvas.getContext('2d');
+        this.root = new Viewport();
         this.lastTime = 0;
-        this.gameLoop = this.gameLoop.bind(this);
         this.fps = 60;
+        this._mainLoop = this._mainLoop.bind(this);
     }
 
     /**
@@ -273,27 +320,45 @@ export class SceneTree {
         this.root.findNodes(className);
     }
 
+    addChild(node) {
+        this.root.addChild(node);
+    }
+
+    removeChild(node) {
+        this.root.removeChild(node);
+    }
+
     /**
      * Ejecuta el bucle de juego.
      */
     run() {
-        requestAnimationFrame(this.gameLoop);
+        requestAnimationFrame(this._mainLoop);
+    }
+
+    update(delta) {
+        this.root.update(delta);
+    }
+
+    render(ctx) {
+        this.ctx.fillStyle = "#242343";
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.root.render(ctx);
     }
 
     /**
      * Método del bucle de juego.
      * @param {number} timestamp - La marca de tiempo del fotograma actual.
      */
-    gameLoop(timestamp) {
+    _mainLoop(timestamp) {
         let delta = timestamp - this.lastTime;
         this.lastTime = timestamp;
 
         if (delta > 1000 / this.fps) delta = 1000 / this.fps;
 
-        this.root._process(delta);
-        this.root._render();
+        this.update(delta);
+        this.render(this.ctx);
 
-        requestAnimationFrame(this.gameLoop);
+        requestAnimationFrame(this._mainLoop);
     }
 
     /**
@@ -302,11 +367,26 @@ export class SceneTree {
      */
     set pause(value) {
         if (value) {
-            cancelAnimationFrame(this.gameLoop);
-            this.root.processMode = 0;
+            cancelAnimationFrame(this._mainLoop);
+            this.root.paused = true;
         } else {
             this.run();
-            this.root.processMode = 1;
+            this.root.paused = false;
         }
     }
+}
+
+
+
+
+const renderer = new Renderer();
+
+/**
+ * Crea el árbol de escena.
+ * @param {HTMLCanvasElement} canvas - El elemento canvas del viewport.
+ * @returns {SceneTree} El árbol de escena.
+ */
+export function createGame(canvas) {
+    const scene = new SceneTree(canvas);
+    return scene;
 }
