@@ -41,7 +41,7 @@ class Player extends Node2D  {
         this.nameLabel = nameLabel;
     }
 
-    update(delta) {
+    _update(delta) {
         // Movimiento del jugador
         this.velocity.x = Input.isPressed('right') - Input.isPressed('left');
         this.velocity.y = Input.isPressed('down') - Input.isPressed('up');
@@ -59,7 +59,7 @@ class Player extends Node2D  {
         }
         this.move(this.velocity);
         // Evita que se salga de los bordes del Viewport.size
-        this.position.clamp(0, 0, this.getRoot().size.x, this.getRoot().size.y);
+        // this.position.clamp(0, 0, this.getRoot().size.x, this.getRoot().size.y);
     }
 
     input_move(vel) {

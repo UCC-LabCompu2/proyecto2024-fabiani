@@ -16,9 +16,9 @@ export class Node2D extends Object {
     }
 
 
-    update(delta) {
+    _update(delta) {
         if (this.paused) return;
-        this.children.forEach(child => child.update(delta));
+        this.children.forEach(child => child._update(delta));
     }
 
     _draw(ctx) {

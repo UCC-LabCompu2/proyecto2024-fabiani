@@ -5,25 +5,33 @@ import Player from "./js/player.js";
 const screen = $("#screen");
 const game = new SceneTree(screen.object);
 
-// Creando el jugador
-const player = new Player();
-player.name = "player";
-const camera = new Camera2D(true);
-camera.name = "Camera"
-Input.onKeyPressed("c", () => camera.toggleActive())
-
-player.position.set(200, 200);
-player.addChild(camera);
-
 const meme = new Sprite("./assets/images/meme.jpg")
 .addTo(game)    
 .position.add(100, 100);
+
+
+// Creando el jugador
+const player = new Player();
+player.name = "player";
+player.position.set(200, 200);
+game.addChild(player);
+
+const camera = new Camera2D(true);
+camera.name = "Camera";
+game.addChild(camera);
+camera.follow(player);
+camera.active = true;
+
+Input.onKeyPressed("c", () => camera.toggleActive())
+
+
+
+
 
 Texture.load("./assets/images/grass.jpg", tex => {
     game.root.setBackgroundTexture(tex)
 })
 
-game.addChild(player);
 
 console.log(game.root.$("./player/Camera"))
 

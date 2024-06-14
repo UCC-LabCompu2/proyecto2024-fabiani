@@ -45,7 +45,7 @@ export class SceneTree {
     }
 
     update(delta) {
-        this.root.update(delta);
+        this.root._update(delta);
     }
 
     render(ctx) {
