@@ -2,40 +2,6 @@ import { Node2D } from './core.js';
 import { Vector2D } from './vector.js';
 
 
-export class Color {
-  constructor(r = 255, g = 255, b = 255, a = 255) {
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
-  }
-
-  static get white() {
-    return new Color(255, 255, 255, 255);
-  }
-
-  static get black() {
-    return new Color(0, 0, 0, 255);
-  }
-
-  static get red() {
-    return new Color(255, 0, 0, 255);
-  }
-
-  static get green() {
-    return new Color(0, 255, 0, 255);
-  }
-
-  static get blue() {
-    return new Color(0, 0, 255, 255);
-  }
-
-  toString() {
-    return `rgba(${this.r},${this.g},${this.b},${this.a / 255})`;
-  }
-}
-
-
 /**
  * Clase que representa un rectángulo coloreado en el lienzo.
  * @extends Node2D
@@ -74,6 +40,14 @@ class Texture extends Node2D {
         super();
         this.image = new Image();
         this.image.src = src;
+    }
+
+    static load(ruta, callback) {
+        const texture = new Image();
+        texture.onload = () => {
+            callback(texture);
+        };
+        texture.src = ruta;
     }
 }
 

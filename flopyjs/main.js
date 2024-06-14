@@ -1,4 +1,5 @@
-import { Color, ColorRect, Sprite, Texture } from './src/canvas.js';
+import { ColorRect, Sprite, Texture } from './src/canvas.js';
+import { Color } from './src/color.js'
 import { Renderer, Camera, Node2D, Object, SceneTree, Viewport, createGame } from './src/core.js';
 import { $ } from './src/dom.js';
 import Input from './src/input.js';

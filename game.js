@@ -1,31 +1,40 @@
-import { Color, ColorRect, $, Label, createGame, Vector2D, Camera } from "./flopyjs/main.js";
+import { Sprite, Texture, Color, ColorRect, $, Label, createGame, Vector2D, Camera, Input } from "./flopyjs/main.js";
 import Player from "./js/player.js";
 
 // Inicializando el juego
 const screen = $("#screen");
 const game = createGame(screen.object);
 
-
 // Creando el jugador
 const player = new Player();
-const camera = new Camera();
+player.name = "player";
+const camera = new Camera(true);
+camera.name = "Camera"
+Input.onKeyPressed("c", () => camera.toggleActive())
 
 player.position.set(200, 200);
-console.log(player)
 player.addChild(camera);
 
-game.root.setCamera(camera)
+const meme = new Sprite("./assets/images/meme.jpg")
+.addTo(game)    
+.position.add(100, 100);
+
+Texture.load("./assets/images/grass.jpg", tex => {
+    game.root.setBackgroundTexture(tex)
+})
+
 game.addChild(player);
 
-// Creando un bloque blanco
-const block = new ColorRect(Color.white, new Vector2D(50, 50));
-block.position.set(100, 100);
-game.addChild(block);
+console.log(game.root.$("./player/Camera"))
 
-const block2 = new ColorRect(Color.red, new Vector2D(200, 200));
+// Creando un bloque blanco
+const block = new ColorRect(Color.BLACK, new Vector2D(50, 50));
+block.position.set(100, 100)
+game.root.addChild(block);
+
+const block2 = new ColorRect(Color.RED, new Vector2D(200, 200));
 block2.position.set(300, 300);
 game.addChild(block2);
-game.root.moveChild(2, 0); // lo mueve detras para que se renderice antes
 
 // Detalle de los fps
 let fps = new Label("FPS: 0", "Pixelify Sans", "white", 16, 100, 50, 200, 20);
@@ -49,6 +58,7 @@ function startGame() {
     }
 
     game.run();
+    console.log(game)
     game.pause = false;
     name.removeClass("error");
     menu.hide();

@@ -1,4 +1,5 @@
 import { Vector2D } from "./vector.js";
+import { Color } from "./color.js";
 
 let ok = ()=> console.log("ok");
 
@@ -13,6 +14,7 @@ export class Object {
         this.name = "";
         this.children = [];
         this.childCount = 0;
+        this.isOnTree = false;
         this.parent = null; // Hasta que se añada al arbol con addChild
     }
 
@@ -34,7 +36,7 @@ export class Object {
      * @returns {Object} El hijo correspondiente al nombre especificado.
      */
     getChildByName(name) {
-        return this.children[name];
+        return this.children.find(child => child.name === name);
     }
 
     /**
@@ -69,6 +71,32 @@ export class Object {
         this.parent = parent;
     }
 
+    _getPathArray() {
+        let path = [];
+        let node = this;
+        while (node.parent) {
+            path.push(node);
+            node = node.parent;
+        }
+        return path.reverse();
+    }
+
+    getPath() {
+        let strPath = "./";
+        let path = this._getPathArray();
+        path.forEach(node => {
+            strPath += node.name + "/";
+        });
+        strPath = strPath.slice(0, -1);
+        return strPath;
+    }
+
+    $(path) {
+        let pathArray = path.slice(2).split("/");
+        let node = this;
+        pathArray.forEach(name => node = node.getChildByName(name));
+        return node;
+    }
     /**
      * Agrega un hijo.
      * @param {Object} child - El hijo a agregar.
@@ -76,7 +104,29 @@ export class Object {
     addChild(child) {
         this.children[this.childCount] = child;
         child.setParent(this);
+        if (this.isOnTree) child._enterTree();
         this.childCount++;
+    }
+
+    addTo(parent) {
+        parent.addChild(this);
+        return this;
+    }
+
+    _init() {
+        this.paused = false;
+        this.children.forEach(child => {
+            child._init();
+        });
+    }
+
+    _ready() {
+        this.children.forEach(child => child._ready());
+    }
+
+    _enterTree() {
+        this.isOnTree = true;
+        this.children.forEach(child => child._enterTree());
     }
 
     /**
@@ -86,6 +136,7 @@ export class Object {
     removeChild(index) {
         delete this.children[index];
         child.setParent(null);
+        child.isOnTree = false;
         this.childCount--;
     }
 
@@ -152,12 +203,6 @@ export class Node2D extends Object {
         this._init();
     }
 
-    _init() {
-        this.paused = false;
-        this.children.forEach(child => {
-            child._init();
-        });
-    }
 
     update(delta) {
         if (this.paused) return;
@@ -203,6 +248,16 @@ export class Viewport extends Node2D {
         super();
         this.size = new Vector2D(400, 400);
         this.camera = null;
+        this.backgroundColor = Color.GRAY;
+        this.backgroundTexture = null;
+    }
+
+    setBackgroundColor(color) {
+        this.backgroundColor = color;
+    }
+
+    setBackgroundTexture(texture) {
+        this.backgroundTexture = texture;
     }
 
     setCamera(camera) {
@@ -210,8 +265,15 @@ export class Viewport extends Node2D {
     }
 
     _draw(ctx) {
-        ctx.fillStyle = "#432956";
-        ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
+        if (this.backgroundTexture) {
+            ctx.fillStyle = ctx.createPattern(this.backgroundTexture, 'repeat');
+            ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
+
+        } else {
+            // Si no hay textura de fondo, utiliza el color de fondo
+            ctx.fillStyle = this.backgroundColor.toString();
+            ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
+        }
     }
 
     render(ctx) {
@@ -230,9 +292,10 @@ export class Viewport extends Node2D {
 
 
 export class Camera extends Node2D {
-    constructor() {
+    constructor(active = false, zoom = 1) {
         super();
         this.zoom = 1;
+        this.active = active;
     }
 
     setZoom(zoom) {
@@ -244,6 +307,17 @@ export class Camera extends Node2D {
         ctx.scale(this.zoom, this.zoom);
         super.render(ctx);
         ctx.restore();
+    }
+    
+    _enterTree() {
+        super._enterTree();
+        if (this.active) this.getRoot().setCamera(this);
+    }
+
+    toggleActive() {
+        if (!this.isOnTree) return;
+        this.active = !this.active;
+        this.getRoot().setCamera(this.active ? this : null);
     }
 }
 
@@ -307,6 +381,7 @@ export class SceneTree {
         this.canvas = canvas;
         this.ctx = this.canvas.getContext('2d');
         this.root = new Viewport();
+        this.root._enterTree();
         this.lastTime = 0;
         this.fps = 60;
         this._mainLoop = this._mainLoop.bind(this);
@@ -322,6 +397,8 @@ export class SceneTree {
 
     addChild(node) {
         this.root.addChild(node);
+        node._enterTree();
+        return node;
     }
 
     removeChild(node) {
@@ -332,6 +409,7 @@ export class SceneTree {
      * Ejecuta el bucle de juego.
      */
     run() {
+        this.root._ready();
         requestAnimationFrame(this._mainLoop);
     }
 

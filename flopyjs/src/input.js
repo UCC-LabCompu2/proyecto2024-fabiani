@@ -91,6 +91,14 @@ class Input {
         }
         return keys.some(key => !!this.keys[key]);
     }
+
+    onKeyPressed(key, callback) {
+        window.addEventListener('keydown', (e) => {
+            if (e.key === key) {
+                callback();
+            }
+        });
+    }
 }
 
 // Exporta una instancia única de Input utilizando el patrón Singleton.
