@@ -1,14 +1,14 @@
-import { Sprite, Texture, Color, ColorRect, $, Label, createGame, Vector2D, Camera, Input } from "./flopyjs/main.js";
+import { SceneTree, Sprite, Texture, Color, ColorRect, $, Label, Vector2D, Camera2D, Input } from "./flopyjs/main.js";
 import Player from "./js/player.js";
 
 // Inicializando el juego
 const screen = $("#screen");
-const game = createGame(screen.object);
+const game = new SceneTree(screen.object);
 
 // Creando el jugador
 const player = new Player();
 player.name = "player";
-const camera = new Camera(true);
+const camera = new Camera2D(true);
 camera.name = "Camera"
 Input.onKeyPressed("c", () => camera.toggleActive())
 

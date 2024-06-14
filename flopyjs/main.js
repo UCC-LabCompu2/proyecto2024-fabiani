@@ -1,12 +1,18 @@
-import { ColorRect, Sprite, Texture } from './src/canvas.js';
-import { Color } from './src/color.js'
-import { Renderer, Camera, Node2D, Object, SceneTree, Viewport, createGame } from './src/core.js';
-import { $ } from './src/dom.js';
-import Input from './src/input.js';
-import { Label } from './src/ui.js';
-import { clamp } from './src/utils.js';
-import { Vector2D } from './src/vector.js';
+export { Node2D } from "./src/core/Node2D.js";
+export { Object } from "./src/core/Object.js";
+export { Camera2D } from "./src/core/Camera2D.js";
+export { SceneTree } from "./src/core/SceneTree.js";
+export { Vector2D } from "./src/utils/Vector2D.js";
+export { Viewport } from "./src/core/Viewport.js";
+import Input from "./src/input/Input.js";
+export { Color } from "./src/utils/Color.js";
+export { Label } from "./src/ui/Label.js";
+export { Sprite } from "./src/ui/Sprite.js";
+export { Texture } from "./src/ui/Texture.js";
+export { ColorRect } from "./src/ui/ColorRect.js";
+export { Renderer } from "./src/core/Render.js";
+export { $ } from "./src/dom/Query.js";
+export * from "./src/utils/maths.js";
+export { Input };
 
-// Exportar todas las clases y utilidades
-export { Renderer, Color, $, Camera, ColorRect, Input, Label, Node2D, Object, SceneTree, Sprite, Texture, Vector2D, Viewport, clamp, createGame };
 

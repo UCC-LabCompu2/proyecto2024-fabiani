@@ -22,6 +22,11 @@ export class Query {
         return this;
     }
 
+    off(event, callback) {
+        this.object.removeEventListener(event, callback);
+        return this;
+    }
+
     /**
      * Oculta el elemento del DOM al agregar la clase 'hidden'.
      */
@@ -110,3 +115,8 @@ export class Query {
 export function $(selector) {
     return new Query(document.querySelector(selector));
 }
+
+export function $$(selector) {
+    return new Query(document.querySelectorAll(selector));
+}
+

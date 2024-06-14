@@ -1,4 +1,4 @@
-import { Node2D } from "./core.js";
+import { Node2D } from "../core/Node2D.js";
 
 /**
  * Label para dibujar texto en pantalla
@@ -11,7 +11,7 @@ import { Node2D } from "./core.js";
  * @param posX Posición X del texto
  * @param posY Posición Y del texto
  */
-class Label extends Node2D {
+export class Label extends Node2D {
     /**
      * 
      * @param {string} text 
@@ -45,5 +45,3 @@ class Label extends Node2D {
         ctx.restore();
     }
 }
-
-export { Label }
