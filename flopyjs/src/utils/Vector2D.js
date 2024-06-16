@@ -9,6 +9,10 @@ export class Vector2D {
         this.x = x;
         this.y = y;
     }
+
+    clone() {
+        return new Vector2D(this.x, this.y);
+    }
     
     /**
      * Set the coordinates of the vector.

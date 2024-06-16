@@ -1,4 +1,4 @@
-import { SceneTree, Sprite, Texture, Color, ColorRect, $, Label, Vector2D, Camera2D, Input } from "./flopyjs/main.js";
+import { Collision, SceneTree, Sprite, Texture, Color, ColorRect, $, Label, Vector2D, Camera2D, Input, BoxShape } from "./flopyjs/main.js";
 import Player from "./js/player.js";
 
 // Inicializando el juego
@@ -23,8 +23,8 @@ camera.active = true;
 Input.onKeyPressed("c", () => camera.toggleActive())
 
 
-
-
+const col1 = new Collision(new Vector2D(100, 100));
+game.addChild(col1);
 
 Texture.load("./assets/images/grass.jpg", tex => {
     game.root.setBackgroundTexture(tex)

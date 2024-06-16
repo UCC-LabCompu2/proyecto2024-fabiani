@@ -4,6 +4,7 @@ export { Camera2D } from "./src/core/Camera2D.js";
 export { SceneTree } from "./src/core/SceneTree.js";
 export { Vector2D } from "./src/utils/Vector2D.js";
 export { Viewport } from "./src/core/Viewport.js";
+import PhysicsEngine from "./src/core/PhysicsEngine.js";
 import Input from "./src/input/Input.js";
 export { Color } from "./src/utils/Color.js";
 export { Label } from "./src/ui/Label.js";
@@ -14,5 +15,10 @@ export { Renderer } from "./src/core/Render.js";
 export { $ } from "./src/dom/Query.js";
 export * from "./src/utils/maths.js";
 export { Input };
+export { Collision } from "./src/core/Collision.js";
+export { BoxShape } from "./src/core/BoxShape.js";
+export { Shape } from "./src/core/Shape.js";
+export { PhysicsEngine };
+export { KinematicBody2D } from "./src/core/KinematicBody2D.js";
 
 
