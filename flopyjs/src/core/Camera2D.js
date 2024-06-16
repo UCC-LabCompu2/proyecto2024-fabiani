@@ -6,8 +6,9 @@ export class Camera2D extends Node2D {
         super();
         this.zoom = 1;
         this.active = active;
-        this.deadZone = new Vector2D(60, 60); // Tamaño del margen
+        this.deadZone = new Vector2D(80, 80); // Tamaño del margen
         this.following = null;
+        this.smoothFactor = 0.1;
     }
 
     follow(node) {
@@ -26,6 +27,7 @@ export class Camera2D extends Node2D {
             let dx = targetPosition.x - globalPosition.x;
             let dy = targetPosition.y - globalPosition.y;
 
+            // Dead zone move
             if (Math.abs(dx) > this.deadZone.x) {
                 this.position.x += dx - Math.sign(dx) * this.deadZone.x;
             }
@@ -33,6 +35,9 @@ export class Camera2D extends Node2D {
             if (Math.abs(dy) > this.deadZone.y) {
                 this.position.y += dy - Math.sign(dy) * this.deadZone.y;
             }
+
+            // Smooth move
+            this.position.lerp(this.following.position, this.smoothFactor)
         }
     }
 

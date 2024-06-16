@@ -12,12 +12,10 @@ const meme = new Sprite("./assets/images/meme.jpg")
 
 // Creando el jugador
 const player = new Player();
-player.name = "player";
 player.position.set(200, 200);
 game.addChild(player);
 
 const camera = new Camera2D(true);
-camera.name = "Camera";
 game.addChild(camera);
 camera.follow(player);
 camera.active = true;
@@ -32,8 +30,12 @@ Texture.load("./assets/images/grass.jpg", tex => {
     game.root.setBackgroundTexture(tex)
 })
 
+try {
+    console.log(game.root.$("./player/Camera"));
+} catch(error) {
+    console.log(error.message);
+}
 
-console.log(game.root.$("./player/Camera"))
 
 // Creando un bloque blanco
 const block = new ColorRect(Color.BLACK, new Vector2D(50, 50));
@@ -66,7 +68,7 @@ function startGame() {
     }
 
     game.run();
-    console.log(game)
+    console.log(player.getPath())
     game.pause = false;
     name.removeClass("error");
     menu.hide();

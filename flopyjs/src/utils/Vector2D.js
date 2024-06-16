@@ -84,6 +84,12 @@ export class Vector2D {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
+    lerp(target, t) {
+        this.x += (target.x - this.x) * t;
+        this.y += (target.y - this.y) * t;
+        return this;
+    }
+
     /**
      * Get the angle of the vector.
      * @returns {number} - The angle of the vector in radians.

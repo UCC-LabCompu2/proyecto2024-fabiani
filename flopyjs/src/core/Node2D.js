@@ -1,24 +1,16 @@
-import { Object } from "./Object.js";
+import { Node } from "./Node.js";
 import { Vector2D } from "../utils/Vector2D.js";
 
-export class Node2D extends Object {
+export class Node2D extends Node {
     constructor() {
         super();
         this.position = Vector2D.ZERO;
         this.rotation = 0; // Rotación en radianes
         this.scale = Vector2D.ONE;
         this.anchor = new Vector2D(0.5, 0.5); // Centro del nodo
-
-        this.paused = true; // Despausado inicialmente
         this.visible = true;
 
         this._init();
-    }
-
-
-    _update(delta) {
-        if (this.paused) return;
-        this.children.forEach(child => child._update(delta));
     }
 
     _draw(ctx) {

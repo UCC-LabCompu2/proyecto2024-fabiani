@@ -2,7 +2,7 @@
 /**
  * Clase base para objetos 
  */
-export class Object {
+export class Node {
     /**
      * Crea un nuevo objeto.
      */
@@ -11,13 +11,15 @@ export class Object {
         this.children = [];
         this.childCount = 0;
         this.isOnTree = false;
+        this.isReady = false;
+        this.paused = true; // Despausado inicialmente
         this.parent = null; // Hasta que se añada al arbol con addChild
     }
 
     /**
      * Obtiene un hijo por su índice.
      * @param {number} index - El índice del hijo.
-     * @returns {Object} El hijo correspondiente al índice especificado.
+     * @returns {Node} El hijo correspondiente al índice especificado.
      */
     getChild(index) {
         return this.children[index];
@@ -90,7 +92,12 @@ export class Object {
     $(path) {
         let pathArray = path.slice(2).split("/");
         let node = this;
-        pathArray.forEach(name => node = node.getChildByName(name));
+        pathArray.forEach(name => {
+            if (!node) {
+                throw new Error(`Node not found: ${path}`);
+            }
+            node = node.getChildByName(name);
+        });
         return node;
     }
     /**
@@ -101,6 +108,7 @@ export class Object {
         this.children[this.childCount] = child;
         child.setParent(this);
         if (this.isOnTree) child._enterTree();
+        if (this.isReady) child._ready();
         this.childCount++;
     }
 
@@ -117,14 +125,34 @@ export class Object {
     }
 
     _ready() {
+        this.isReady = true;
         this.children.forEach(child => child._ready());
+    }
+
+    _update(delta) {
+        if (this.paused) return;
+        this.children.forEach(child => child._update(delta));
     }
 
     _enterTree() {
         this.isOnTree = true;
+        // select default name
+        if (this.name == "") this.name = this._defaultName();
         this.children.forEach(child => child._enterTree());
     }
 
+    _defaultName() {
+        if (!this.parent) return "root"; // Es el Viewport principal instanciado por SceneTree
+        let name = this.constructor.name;
+        let k = 0;
+        this.parent.children.forEach(child => {
+            if (child.name == (name + k)) {
+                k++;
+            }
+        });
+        name += k;
+        return name;
+    }
     /**
      * Elimina un hijo por su índice.
      * @param {number} index - El índice del hijo a eliminar.

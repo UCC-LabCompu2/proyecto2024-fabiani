@@ -1,4 +1,4 @@
-import { Renderer, Color, Label, Node2D, Vector2D, Sprite, Input } from "../flopyjs/main.js";
+import { Label, Node2D, Vector2D, Sprite, Input } from "../flopyjs/main.js";
 import { Joystick } from "./joystick.js"
 
 // Agrega otras teclas como entrada

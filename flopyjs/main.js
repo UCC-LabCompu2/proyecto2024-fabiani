@@ -1,5 +1,5 @@
 export { Node2D } from "./src/core/Node2D.js";
-export { Object } from "./src/core/Object.js";
+export { Node } from "./src/core/Node.js";
 export { Camera2D } from "./src/core/Camera2D.js";
 export { SceneTree } from "./src/core/SceneTree.js";
 export { Vector2D } from "./src/utils/Vector2D.js";
