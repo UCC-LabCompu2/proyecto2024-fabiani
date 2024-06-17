@@ -6,7 +6,7 @@ export class Camera2D extends Node2D {
         super();
         this.zoom = 1;
         this.active = active;
-        this.deadZone = new Vector2D(80, 80); // Tamaño del margen
+        this.deadZone = new Vector2D(40, 40); // Tamaño del margen
         this.following = null;
         this.smoothFactor = 0.1;
     }
@@ -37,15 +37,8 @@ export class Camera2D extends Node2D {
             }
 
             // Smooth move
-            this.position.lerp(this.following.position, this.smoothFactor)
+            // this.position.lerp(this.following.position, this.smoothFactor)
         }
-    }
-
-    render(ctx) {
-        ctx.save();
-        ctx.scale(this.zoom, this.zoom);
-        super.render(ctx);
-        ctx.restore();
     }
     
     _enterTree() {

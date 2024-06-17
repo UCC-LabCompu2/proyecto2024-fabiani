@@ -1,4 +1,4 @@
-import { Collision, KinematicBody2D, Label, Node2D, Vector2D, Sprite, Input} from "../flopyjs/main.js";
+import { Texture, Collision, KinematicBody2D, Label, Node2D, Vector2D, AnimatedSprite, Input} from "../flopyjs/main.js";
 import { Joystick } from "./joystick.js"
 
 // Agrega otras teclas como entrada
@@ -28,11 +28,13 @@ class Player extends KinematicBody2D  {
         this.playerName = "";
         this.velocity = new Vector2D();
         // Crea y añade como hijo una imagen al jugador para que se renderice
-        let spr = new Sprite("./assets/sprites/player.png");
-        spr.name = "spr";
-        spr.anchor.set(0.5, 0.5);
-        this.addChild(spr)
-        this.spr = spr;
+        Texture.load("./assets/images/red-shroom-idle.png", (image) => {
+            this.spr = new AnimatedSprite(image, 32, 32, 2, 0.002);
+            this.spr.name = "spr";
+            this.spr.anchor.set(16, 16);
+            this.addChild(this.spr)
+        });
+        
         let nameLabel = new Label(this.playerName, "Pixelify Sans", "white", 18);
         nameLabel.anchor.set(0.5, 0.5);
         nameLabel.name = "nameLabel";
@@ -49,7 +51,7 @@ class Player extends KinematicBody2D  {
     }
 
     _update(delta) {
-        super._update();
+        super._update(delta);
         // Movimiento del jugador
         this.velocity.x = Input.isPressed('right') - Input.isPressed('left');
         this.velocity.y = Input.isPressed('down') - Input.isPressed('up');
@@ -62,9 +64,8 @@ class Player extends KinematicBody2D  {
         
 
         this.velocity.mult(this.speed * delta);
-        if (!this.velocity.isEquals(0, 0)) {
-            this.spr.rotation = this.velocity.angle() + Math.PI * (3 / 2);
-        }
+        // Rotar segun la velocidad
+        // if (!this.velocity.isEquals(0, 0)) this.spr.rotation = this.velocity.angle() + Math.PI * (3 / 2);
         this.slide(this.velocity);
         // Evita que se salga de los bordes del Viewport.size
         // this.position.clamp(0, 0, this.getRoot().size.x, this.getRoot().size.y);

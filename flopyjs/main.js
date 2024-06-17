@@ -20,5 +20,5 @@ export { BoxShape } from "./src/core/BoxShape.js";
 export { Shape } from "./src/core/Shape.js";
 export { PhysicsEngine };
 export { KinematicBody2D } from "./src/core/KinematicBody2D.js";
-
+export { AnimatedSprite } from "./src/ui/AnimatedSprite.js";
 

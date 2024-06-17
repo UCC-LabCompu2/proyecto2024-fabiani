@@ -49,8 +49,8 @@ export class SceneTree {
     }
 
     render(ctx) {
-        this.ctx.fillStyle = "#242343";
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.fillStyle = "#888888";
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.root.render(ctx);
     }
 

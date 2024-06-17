@@ -5,6 +5,7 @@ import Player from "./js/player.js";
 const screen = $("#screen");
 const game = new SceneTree(screen.object);
 
+game.canvas.getContext("2d").setSmoothingImage = false;
 const meme = new Sprite("./assets/images/meme.jpg")
 .addTo(game)    
 .position.add(100, 100);
@@ -19,6 +20,7 @@ const camera = new Camera2D(true);
 game.addChild(camera);
 camera.follow(player);
 camera.active = true;
+camera.zoom = 2;
 
 Input.onKeyPressed("c", () => camera.toggleActive())
 
@@ -27,7 +29,7 @@ const col1 = new Collision(new Vector2D(100, 100));
 game.addChild(col1);
 
 Texture.load("./assets/images/grass.jpg", tex => {
-    game.root.setBackgroundTexture(tex)
+    game.backgroundTexture = tex
 })
 
 try {

@@ -3,6 +3,11 @@ import { Vector2D } from "../utils/Vector2D.js";
 import PhysicsEngine from "./PhysicsEngine.js";
 
 export class KinematicBody2D extends Node2D {
+
+    _update(deltaTime) {
+        super._update(deltaTime);
+    }
+
     slide(vel) {
         let newPosition = this.position.clone().add(vel);
         if (!this.checkCollisions(newPosition)) {

@@ -23,24 +23,15 @@ export class Viewport extends Node2D {
         this.camera = camera;
     }
 
-    _draw(ctx) {
-        if (this.backgroundTexture) {
-            ctx.fillStyle = ctx.createPattern(this.backgroundTexture, 'repeat');
-            ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
-
-        } else {
-            // Si no hay textura de fondo, utiliza el color de fondo
-            ctx.fillStyle = this.backgroundColor.toString();
-            ctx.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);
-        }
-    }
 
     render(ctx) {
         if (this.camera) {
             ctx.save();
             // Camara
-            const offset = this.camera.getGlobalPosition();
-            ctx.translate(-offset.x + this.size.x / 2, -offset.y + this.size.y / 2);
+            const camPos = this.camera.getGlobalPosition();
+            const offset = camPos.invert().add(this.size.clone().div(2))
+            //ctx.scale(this.camera.zoom, this.camera.zoom)
+            ctx.translate(offset.x, offset.y);
             super.render(ctx);
             ctx.restore();
         } else {

@@ -14,6 +14,11 @@ export class Vector2D {
         return new Vector2D(this.x, this.y);
     }
     
+    invert() {
+        this.x = -this.x;
+        this.y = -this.y;
+        return this;
+    }
     /**
      * Set the coordinates of the vector.
      * @param {number} x - The x coordinate.
