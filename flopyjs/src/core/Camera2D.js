@@ -19,6 +19,22 @@ export class Camera2D extends Node2D {
         this.zoom = zoom;
     }
 
+    _draw(ctx) {
+        super._draw(ctx);
+        this.drawDeadZone(ctx);
+    }
+
+    drawDeadZone(ctx) {
+        ctx.strokeStyle = "green";
+        ctx.beginPath();
+        ctx.moveTo(-this.deadZone.x, -this.deadZone.y);
+        ctx.lineTo(this.deadZone.x, -this.deadZone.y);
+        ctx.lineTo(this.deadZone.x, this.deadZone.y);
+        ctx.lineTo(-this.deadZone.x, this.deadZone.y);
+        ctx.lineTo(-this.deadZone.x, -this.deadZone.y);
+        ctx.stroke();
+    }
+
     _update() {
         if (this.following) {
             let globalPosition = this.getGlobalPosition();

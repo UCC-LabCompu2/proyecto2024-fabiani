@@ -148,6 +148,31 @@ export class Vector2D {
         }
         return this;
     }
+    
+    rotate(angle) {
+        let cos = Math.cos(angle);
+        let sin = Math.sin(angle);
+        return new Vector2D(
+            this.x * cos - this.y * sin,
+            this.x * sin + this.y * cos
+        );
+    }
+
+    dot(v) {
+        return this.x * v.x + this.y * v.y;
+    }
+
+    cross(v) {
+        return this.x * v.y - this.y * v.x;
+    }
+
+    // Método para la multiplicación de la matriz 2x2
+    transform(matrix) {
+        return new Vector2D(
+            this.x * matrix[0][0] + this.y * matrix[0][1],
+            this.x * matrix[1][0] + this.y * matrix[1][1]
+        );
+    }
 
     /**
      * Add two vectors.

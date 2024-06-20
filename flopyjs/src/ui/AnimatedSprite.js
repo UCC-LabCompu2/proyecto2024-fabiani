@@ -25,6 +25,6 @@ export class AnimatedSprite extends Node2D {
         const frameY = 0;
         ctx.drawImage(this.image,
             frameX, frameY, this.frameWidth, this.frameHeight,
-            this.position.x - this.anchor.x, this.position.y - this.anchor.y, this.frameWidth, this.frameHeight);
+            this.position.x - this.pivot.x, this.position.y - this.pivot.y, this.frameWidth, this.frameHeight);
     }
 }

@@ -1,0 +1,28 @@
+{
+  "tileWidth": 32,
+  "tileHeight": 32,
+  "tilesPerRow": 3,
+  "tilesetImage": "assets/images/level.png",
+  "layers": [
+    {
+      "name": "background",
+      "data": [
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1]
+      ]
+    },
+    {
+      "name": "collision",
+      "data": [
+        [2, 2, 2, 2, 2],
+        [2, 0, 0, 0, 2],
+        [2, 0, 0, 0, 2],
+        [2, 0, 0, 0, 2],
+        [2, 2, 2, 2, 2]
+      ]
+    }
+  ]
+}

@@ -17,9 +17,9 @@ export class Texture extends Node2D {
 
     static load(ruta, callback) {
         const texture = new Image();
+        texture.src = ruta;
         texture.onload = () => {
             callback(texture);
         };
-        texture.src = ruta;
     }
 }

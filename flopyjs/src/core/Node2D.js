@@ -7,14 +7,38 @@ export class Node2D extends Node {
         this.position = Vector2D.ZERO;
         this.rotation = 0; // Rotación en radianes
         this.scale = Vector2D.ONE;
-        this.anchor = new Vector2D(0.5, 0.5); // Centro del nodo
+        this.pivot = Vector2D.ZERO; // Centro del nodo
         this.visible = true;
 
         this._init();
     }
 
     _draw(ctx) {
-        return
+        ctx.strokeStyle = "white";
+        this.drawCross(ctx);
+        this.drawName(ctx);
+        ctx.save();
+        ctx.strokeStyle = "cyan";
+        ctx.translate(this.pivot.x, this.pivot.y);
+        this.drawCross(ctx);
+        ctx.restore();
+    }
+
+
+    drawName(ctx) {
+        ctx.fillStyle = "white";
+        ctx.font = "12px Arial";
+        ctx.fillText(this.name, 0, 15);
+        ctx.fillText('('+this.constructor.name+')', 0, 25);
+    }
+
+    drawCross(ctx) {
+        ctx.beginPath();
+        ctx.moveTo(-5, 0);
+        ctx.lineTo(5, 0);
+        ctx.moveTo(0, -5);
+        ctx.lineTo(0, 5);
+        ctx.stroke();
     }
 
     render(ctx) {

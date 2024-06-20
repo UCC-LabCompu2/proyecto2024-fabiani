@@ -1,4 +1,4 @@
-import { Texture, Collision, KinematicBody2D, Label, Node2D, Vector2D, AnimatedSprite, Input} from "../flopyjs/main.js";
+import { Texture, BoxShape, CollisionShape, KinematicBody2D, Label, Node2D, Vector2D, AnimatedSprite, Input} from "../flopyjs/main.js";
 import { Joystick } from "./joystick.js"
 
 // Agrega otras teclas como entrada
@@ -31,23 +31,20 @@ class Player extends KinematicBody2D  {
         Texture.load("./assets/images/red-shroom-idle.png", (image) => {
             this.spr = new AnimatedSprite(image, 32, 32, 2, 0.002);
             this.spr.name = "spr";
-            this.spr.anchor.set(16, 16);
             this.addChild(this.spr)
         });
         
         let nameLabel = new Label(this.playerName, "Pixelify Sans", "white", 18);
-        nameLabel.anchor.set(0.5, 0.5);
+        nameLabel.pivot.set(0.5, 0.5);
         nameLabel.name = "nameLabel";
         nameLabel.posX = 0;
         nameLabel.posY = -40;
         this.addChild(nameLabel);
         this.nameLabel = nameLabel;
-        const col = new Collision(new Vector2D(32, 32));
-        col.position = new Vector2D(-16, -16);
+        const col = new CollisionShape(new BoxShape(new Vector2D(32, 32)));
         this.addChild(col);
         this.lastColPos;
         this.col = col;
-
     }
 
     _update(delta) {
@@ -66,7 +63,7 @@ class Player extends KinematicBody2D  {
         this.velocity.mult(this.speed * delta);
         // Rotar segun la velocidad
         // if (!this.velocity.isEquals(0, 0)) this.spr.rotation = this.velocity.angle() + Math.PI * (3 / 2);
-        this.slide(this.velocity);
+        this.moveAndSlide(this.velocity);
         // Evita que se salga de los bordes del Viewport.size
         // this.position.clamp(0, 0, this.getRoot().size.x, this.getRoot().size.y);
     }

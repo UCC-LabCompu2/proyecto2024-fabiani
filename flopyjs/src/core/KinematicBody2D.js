@@ -1,42 +1,46 @@
-import { Node2D } from "./Node2D.js";
-import { Vector2D } from "../utils/Vector2D.js";
-import PhysicsEngine from "./PhysicsEngine.js";
+import { Node2D } from './Node2D.js';
+import PhysicsEngine from './PhysicsEngine.js';
+import { CollisionShape } from './CollisionShape.js';
 
 export class KinematicBody2D extends Node2D {
-
-    _update(deltaTime) {
-        super._update(deltaTime);
+    constructor() {
+        super();
+        this.velocity = { x: 0, y: 0 };
+        this.collisionShape = null;
     }
 
-    slide(vel) {
-        let newPosition = this.position.clone().add(vel);
-        if (!this.checkCollisions(newPosition)) {
-            this.position.add(vel);
+    setCollisionShape(shape) {
+        this.collisionShape = shape;
+    }
+
+    moveAndSlide(velocity) {
+        let newPosition = this.getGlobalPosition().add(velocity);
+
+        if (this.collisionShape) {
+            let colliding = false;
+
+            // Check collisions with all other colliders
+            for (let collider of PhysicsEngine.colliders) {
+                if (collider !== this.collisionShape && collider.collide(this.collisionShape, newPosition)) {
+                    colliding = true;
+                    break;
+                }
+            }
+
+            // Move only if no collision detected
+            if (!colliding) {
+                this.position.add(velocity)
+            }
         } else {
-            // Movimiento en X
-            newPosition = this.position.clone().add(new Vector2D(vel.x, 0));
-            if (!this.checkCollisions(newPosition)) {
-                this.position.add(new Vector2D(vel.x, 0));
-            }
-
-            // Movimiento en Y
-            newPosition = this.position.clone().add(new Vector2D(0, vel.y));
-            if (!this.checkCollisions(newPosition)) {
-                this.position.add(new Vector2D(0, vel.y));
-            }
+            // Move without collision check if no collision shape is set
+            this.position.add(velocity)
         }
     }
 
-    checkCollisions(newPosition) {
-        this.lastColPos = this.position.clone();
-        this.position = newPosition;
-        for (let collider of PhysicsEngine.colliders) {
-            if (collider !== this.col && collider.collide(this.col)) {
-                this.position = this.lastColPos;
-                return true;
-            }
+    addChild(child) {
+        super.addChild(child);
+        if (child instanceof CollisionShape) {
+            this.setCollisionShape(child);
         }
-        this.position = this.lastColPos;
-        return false;
     }
 }
