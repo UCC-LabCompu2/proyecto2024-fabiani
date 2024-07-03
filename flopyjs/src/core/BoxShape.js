@@ -1,4 +1,5 @@
 import { Shape } from './Shape.js';
+import { Vector2D } from '../utils/Vector2D.js';
 
 export class BoxShape extends Shape {
     constructor(size) {
@@ -6,25 +7,31 @@ export class BoxShape extends Shape {
         this.size = size;
     }
 
-    intersects(otherShapePosition, otherShape, newPosition) {
-        if (otherShape instanceof BoxShape) {
-            // Check intersection using AABB (Axis-Aligned Bounding Box) method
-            let left1 = newPosition.x - this.size.x / 2;
-            let right1 = newPosition.x + this.size.x / 2;
-            let top1 = newPosition.y - this.size.y / 2;
-            let bottom1 = newPosition.y + this.size.y / 2;
+    intersects(shape) {
+        if (shape instanceof BoxShape) {
+            const dx = this.position.x - shape.position.x;
+            const dy = this.position.y - shape.position.y;
+            const intersectX = Math.abs(dx) < (this.size.x / 2 + shape.size.x / 2);
+            const intersectY = Math.abs(dy) < (this.size.y / 2 + shape.size.y / 2);
 
-            let left2 = otherShapePosition.x - otherShape.size.x / 2;
-            let right2 = otherShapePosition.x + otherShape.size.x / 2;
-            let top2 = otherShapePosition.y - otherShape.size.y / 2;
-            let bottom2 = otherShapePosition.y + otherShape.size.y / 2;
-            console.log(otherShapePosition, newPosition)
-            return !(right1 < left2 || 
-                     right2 < left1 || 
-                     bottom1 < top2 || 
-                     bottom2 < top1);
+            if (intersectX && intersectY) {
+                const overlapX = this.size.x / 2 + shape.size.x / 2 - Math.abs(dx);
+                const overlapY = this.size.y / 2 + shape.size.y / 2 - Math.abs(dy);
+
+                if (overlapX < overlapY) {
+                    return {
+                        normal: new Vector2D(Math.sign(dx), 0),
+                        overlap: overlapX
+                    };
+                } else {
+                    return {
+                        normal: new Vector2D(0, Math.sign(dy)),
+                        overlap: overlapY
+                    };
+                }
+            }
         }
-        return false;
+        return null;
     }
 
     _draw(ctx) {

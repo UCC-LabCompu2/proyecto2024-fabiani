@@ -23,3 +23,4 @@ export { KinematicBody2D } from "./src/core/KinematicBody2D.js";
 export { AnimatedSprite } from "./src/ui/AnimatedSprite.js";
 export { TileMap } from "./src/core/TileMap.js";
 export { TileSet } from "./src/core/TileSet.js";
+export { HitBox} from "./src/core/HitBox.js";

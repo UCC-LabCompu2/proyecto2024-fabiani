@@ -1,4 +1,5 @@
 import { Texture, BoxShape, CollisionShape, KinematicBody2D, Label, Node2D, Vector2D, AnimatedSprite, Input} from "../flopyjs/main.js";
+import HitBox from "../flopyjs/src/core/HitBox.js";
 import { Joystick } from "./joystick.js"
 
 // Agrega otras teclas como entrada
@@ -23,7 +24,7 @@ class Player extends KinematicBody2D  {
         super();
         this.position = new Vector2D();
         this.joystick = new Joystick('joystick-container')
-        this.speed = 0.5;
+        this.speed = 1;
         this.size = new Vector2D(32, 32);
         this.playerName = "";
         this.velocity = new Vector2D();
@@ -41,7 +42,7 @@ class Player extends KinematicBody2D  {
         nameLabel.posY = -40;
         this.addChild(nameLabel);
         this.nameLabel = nameLabel;
-        const col = new CollisionShape(new BoxShape(new Vector2D(32, 32)));
+        const col = new HitBox(0, 0, 100, 100);
         this.addChild(col);
         this.lastColPos;
         this.col = col;
@@ -59,7 +60,6 @@ class Player extends KinematicBody2D  {
             this.velocity.normalize()
         }
         
-
         this.velocity.mult(this.speed * delta);
         // Rotar segun la velocidad
         // if (!this.velocity.isEquals(0, 0)) this.spr.rotation = this.velocity.angle() + Math.PI * (3 / 2);
@@ -69,7 +69,7 @@ class Player extends KinematicBody2D  {
     }
 
     input_move(vel) {
-        this.slide(vel.mult(this.speed));
+        this.moveAndSlide(vel.mult(this.speed));
     }
 }
 

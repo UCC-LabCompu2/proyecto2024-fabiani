@@ -1,4 +1,4 @@
-import { TileMap, CollisionShape, SceneTree, Sprite, Texture, Color, ColorRect, $, Label, Vector2D, Camera2D, Input, BoxShape } from "./flopyjs/main.js";
+import { TileMap, HitBox, CollisionShape, SceneTree, Sprite, Texture, Color, ColorRect, $, Label, Vector2D, Camera2D, Input, BoxShape } from "./flopyjs/main.js";
 import Player from "./js/player.js";
 
 // Configurando
@@ -28,47 +28,47 @@ async function loadTileMap(filePath) {
     return data;
 }
 
-const tilesetData = {
-    "tileWidth": 32,
-    "tileHeight": 32,
-    "tilesPerRow": 3,
-    "tilesetImage": "assets/images/level.png",
-    "layers": [
-      {
-        "name": "background",
-        "data": [
-            [1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1]
-        ]
-      },
-      {
-        "name": "collision",
-        "data": [
-          [2, 2, 2, 2, 2],
-          [2, 0, 0, 0, 2],
-          [2, 0, 0, 0, 2],
-          [2, 0, 0, 0, 2],
-          [2, 2, 2, 2, 2]
-        ]
-      }
-    ]
-  }
+// const tilesetData = {
+//     "tileWidth": 32,
+//     "tileHeight": 32,
+//     "tilesPerRow": 3,
+//     "tilesetImage": "assets/images/level.png",
+//     "layers": [
+//       {
+//         "name": "background",
+//         "data": [
+//             [1, 1, 1, 1, 1],
+//             [1, 1, 1, 1, 1],
+//             [1, 1, 1, 1, 1],
+//             [1, 1, 1, 1, 1],
+//             [1, 1, 1, 1, 1]
+//         ]
+//       },
+//       {
+//         "name": "collision",
+//         "data": [
+//           [2, 2, 2, 2, 2],
+//           [2, 0, 0, 0, 2],
+//           [2, 0, 0, 0, 2],
+//           [2, 0, 0, 0, 2],
+//           [2, 2, 2, 2, 2]
+//         ]
+//       }
+//     ]
+//   }
   
 
-// loadTileMap('./level.json').then(tileMapData => {
-    const tileMap = new TileMap(tilesetData);
-    tileMap.addCollisions();
+// // loadTileMap('./level.json').then(tileMapData => {
+//     const tileMap = new TileMap(tilesetData);
+//     tileMap.addCollisions();
 
-    // Integrar el tileMap con el juego
-    game.root.addChild(tileMap);
-    console.log(game);
-// });
+//     // Integrar el tileMap con el juego
+//     game.root.addChild(tileMap);
+//     console.log(game);
+// // });
 
 // Creando una colision
-const col1 = new CollisionShape(new BoxShape(new Vector2D(100, 100)));
+const col1 = new HitBox(0, 0, 100, 100);
 game.addChild(col1);
 
 Texture.load("./assets/images/grass.jpg", tex => {

@@ -16,11 +16,14 @@ export class CollisionShape extends Node2D {
     }
 
 
-    collide(other, newPosition) {
-        other.shape.intersects(this.getGlobalPosition(), this.shape, newPosition)
+    collide(other) {
+        this.shape.position = this.getGlobalPosition();
+        other.shape.position = other.getGlobalPosition();
+        return other.shape.intersects(this.shape)
     }
 
     _draw(ctx) {
         if (this.shape) this.shape._draw(ctx);
+        super._draw(ctx);
     }
 }
