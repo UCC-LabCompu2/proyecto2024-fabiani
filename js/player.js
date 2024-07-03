@@ -24,7 +24,7 @@ class Player extends KinematicBody2D  {
         super();
         this.position = new Vector2D();
         this.joystick = new Joystick('joystick-container')
-        this.speed = 1;
+        this.speed = 0.5;
         this.size = new Vector2D(32, 32);
         this.playerName = "";
         this.velocity = new Vector2D();
@@ -42,7 +42,7 @@ class Player extends KinematicBody2D  {
         nameLabel.posY = -40;
         this.addChild(nameLabel);
         this.nameLabel = nameLabel;
-        const col = new HitBox(0, 0, 100, 100);
+        const col = new HitBox(0, 0, 32, 32);
         this.addChild(col);
         this.lastColPos;
         this.col = col;
